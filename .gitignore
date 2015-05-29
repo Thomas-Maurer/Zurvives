@@ -9,6 +9,9 @@ capybara-*.html
 /db/*.sqlite3-journal
 /config/database.yml
 /public/system
+/public/assets/**/*
+/public/assets/.*
+/public/assets/*.*
 /coverage/
 /spec/tmp
 **.orig
