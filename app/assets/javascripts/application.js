@@ -12,6 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
+<<<<<<< HEAD
+//= require turbolinks
+//= require_tree .
+=======
 //= require angular/angular
 //= require ui-router/release/angular-ui-router
 //= require_tree
+>>>>>>> master
