@@ -38,3 +38,4 @@ bower.json
 .powenv
 
 config/initializers/devise.rb
+
