@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Zurvives
   class Application < Rails::Application
+    require "#{Rails.root}/config/initializers/bower_rails.rb"
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -20,7 +23,7 @@ module Zurvives
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
+    # Do not swallow errors in after_commit/after_rollback callbacks
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
