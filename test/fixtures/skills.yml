@@ -1,26 +1,26 @@
 skill1:
   name: Action
   description: The Survivor has an extra Action he may use as he pleases.
-  skill_type: 'action'
+  skill_type: 'actif'
   nb: 1
 
 skill2:
   name: Damage
   description: The Survivor gets a +1 Damage bonus with the specified type of Action (Melee or Ranged).
-  skill_type: 'damage'
+  skill_type: 'passif'
   nb: 1
 
 
 skill3:
    name: 'to dice roll: Combat'
    description: 'The Survivor adds 1 to the result of each die he rolls on a Combat Action (Melee or Ranged).The maximum result is always 6.'
-   skill_type: 'action'
+   skill_type: 'passif'
    nb: 1
 
 skill4:
   name: 'to dice roll: Melee'
   description: 'The Survivor adds 1 to the result of each die he rolls in Melee Combat. The maximum result is always 6.'
-  skill_type: 'action'
+  skill_type: 'passif'
   nb: 1
 
 skill5:
