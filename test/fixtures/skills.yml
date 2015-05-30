@@ -1,0 +1,217 @@
+skill1:
+  name: Action
+  description: The Survivor has an extra Action he may use as he pleases.
+  skill_type: 'action'
+  nb: 1
+
+skill2:
+  name: Damage
+  description: The Survivor gets a +1 Damage bonus with the specified type of Action (Melee or Ranged).
+  skill_type: 'damage'
+  nb: 1
+
+
+skill3:
+   name: 'to dice roll: Combat'
+   description: 'The Survivor adds 1 to the result of each die he rolls on a Combat Action (Melee or Ranged).The maximum result is always 6.'
+   skill_type: 'action'
+   nb: 1
+
+skill4:
+  name: 'to dice roll: Melee'
+  description: 'The Survivor adds 1 to the result of each die he rolls in Melee Combat. The maximum result is always 6.'
+  skill_type: 'action'
+  nb: 1
+
+skill5:
+  name: 'to dice roll: Ranged'
+  description: 'The Survivor adds 1 to the result of each die he rolls in Ranged Combat. The maximum result is always 6.'
+  skill_type: 'action'
+  nb: 1
+
+skill6:
+  name: 'die: Combat'
+  description: 'The Survivor’s weapons roll an extra die in Combat (Melee or Ranged). Dual weapons gain a die each, for a total of +2 dice per Dual Combat Action'
+  skill_type: 'action'
+  nb: 1
+
+skill7:
+  name: 'die: Melee'
+  description: 'The Survivor’s Melee weapons rolls an extra die in Combat. Dual melee weapons gain a die each, for a total of +2 dice per Dual Melee Combat Action.'
+  skill_type: 'action'
+  nb: 1
+
+skill8:
+  name: 'die: Ranged'
+  description: 'The Survivor’s Ranged weapons roll an extra die in Combat. Dual ranged weapons gain a die each, for a total of +2 dice per Dual Ranged Combat Action.'
+  skill_type: 'action'
+  nb: 1
+
+skill9:
+  name: free Combat Action
+  description: 'The Survivor has one free extra Combat Action. This Action may only be used for Melee or Ranged Combat.'
+  skill_type: 'action'
+  nb: 1
+
+skill10:
+  name: free Move Action
+  description: The Survivor has one free extra Move Action. This Action may only be used as a Move Action.
+  skill_type: 'action'
+  nb: 1
+
+skill11:
+  name: free Search Action
+  description: The Survivor has one free extra Search Action. This Action may only be used to Search and the Survivor can still only Search once per turn.
+  skill_type: 'action'
+  nb: 1
+
+skill12:
+  name:  max Range
+  description: he Survivor’s Ranged weapons’ maximum Range is increased by 1.
+  skill_type: 'action'
+  nb: 1
+
+skill13:
+  name: Zone per Move
+  description: The Survivor can move through one extra Zone each time he performs a Move Action. This Skill stacks with other effects benefitting Move Actions
+  skill_type: 'action'
+  nb: 1
+
+skill14:
+  name: re-roll per turn
+  description: Once per turn, you can re-roll all the dice related to the resolution of an Action made by the Survivor. The new result takes the place of the previous one. This Skill stacks with the effects of Equipment that allow re-rolls.
+  skill_type: 'action'
+  nb: 1
+
+skill15:
+   name: 'cocktails are better than 1'
+   description: The Survivor gets two Molotov cards instead of one when he creates a Molotov.
+   skill_type: 'action'
+   nb: 2
+
+skill16:
+  name: 'Zones per Move Action'
+  description: 'When the Survivor spends one Action to Move, he can move one or two Zones instead of one.'
+  skill_type: 'action'
+  nb: 2
+
+skill17:
+  name: 'Ambidextrous'
+  description: 'The Survivor treats all Melee and Ranged weapons as if they had the Dual symbol'
+  skill_type: 'action'
+  nb: 0
+
+skil18:
+  name: 'Born leader'
+  description: 'During the Survivor’s turn, he may give one free Action to another Survivor, to use as he pleases. This Action must be used during the recipient’s next turn or it is lost.'
+  skill_type: 'action'
+  nb: 0
+
+skill19:
+  name: 'die: Melee'
+  description: 'The Survivor’s Melee weapons rolls an extra die in Combat. Dual melee weapons gain a die each, for a total of +2 dice per Dual Melee Combat Action.'
+  skill_type: 'action'
+  nb: 0
+
+skil20:
+  name: 'Destiny'
+  description: The Survivor can use this Skill once per turn when he reveals an Equipment card he drew. Discard that card and draw another Equipment card.
+  skill_type: 'action'
+  nb: 0
+
+skill21:
+  name: Gunslinger
+  description: 'The Survivor treats all Ranged weapons as if they had the Dual symbol'
+  skill_type: 'action'
+  nb: 0
+
+skill22:
+  name: Hoard
+  description: The Survivor can carry one extra Equipment card in reserve.
+  skill_type: 'action'
+  nb: 0
+
+skill23:
+  name: Hold your nose
+  description:  This Skill can be used once per turn. The Survivor gets a free Search Action in the Zone if he has eliminated a Zombie (even outside a building) the very same turn. This Action may only be used to Search and the Survivor can still only Search once per turn.
+  skill_type: 'action'
+  nb: 0
+
+skill24:
+  name: Is that all you’ve got?
+  description: You can use this Skill any time the Survivor is about to get Wounded cards. Discard one Equipment card in your Survivor’s inventory for each Wound he’s about to receive. Negate a Wounded card per discarded Equipment card.
+  skill_type: 'action'
+  nb: 0
+
+skill25:
+  name: Lock it down
+  description: At the cost of one Action, the Survivor can close an open door. Opening it again later does not trigger a new Zombie Spawn.
+  skill_type: 'action'
+  nb: 0
+
+skill26:
+  name: Loud
+  description: Once per turn, the Survivor can make a huge amount of noise! Until this Survivor’s next turn, the Zone he used this Skill in is considered to have the highest number of Noise tokens on the entire map. If different Survivors have this Skill, only the last one who used it applies the effects.
+  skill_type: 'action'
+  nb: 0
+
+
+skill27:
+  name: 'Lucky'
+  description: The Survivor can re-roll once all the dice of each Action he takes. The new result takes the place of the previous one. This Skill stacks with the effects of other Skills (“1 re-roll p
+  skill_type: 'action'
+  nb: 0
+
+skill28:
+  name: 'Matching Set!'
+  description: 'When a Survivor performs a Search Action and draws a weapon card with the Dual symbol he can immediately take a second card of the same type from the Equipment deck. Shuffle the deck afterward.'
+  skill_type: 'action'
+  nb: 0
+
+skill29:
+  name: 'Medic'
+  description: 'Once per turn, the Survivor can freely remove one Wounded card from a Survivor in the same Zone. He may also heal himself.'
+  skill_type: 'action'
+  nb: 0
+
+skill30:
+  name: 'Ninja'
+  description: 'The Survivor makes no Noise. At all. His miniature does not count as a Noise token, and his use of Equipment or weapons produces no Noise tokens either! The Survivor may choose not to use this Skill at any time, if he wishes to be noisy.'
+  skill_type: 'action'
+  nb: 0
+
+skill31:
+  name: 'Slippery'
+  description: 'The Survivor does not spend extra Actions when he performs a Move Action through a Zone where there are Zombies.'
+  skill_type: 'action'
+  nb: 0
+
+skill32:
+  name: 'Sniper'
+  description: The Survivor may freely choose the targets of all his Ranged Combat Actions.
+  skill_type: 'action'
+  nb: 0
+
+skill33:
+  name: 'Starts with a [Equipment]'
+  description: The Survivor begins the game with the indicated Equipment; its card is automatically assigned to him before the beginning of the game.
+  skill_type: 'action'
+  nb: 0
+
+skill34:
+  name: Swordmaster
+  description: The Survivor treats all Melee weapons as if they had the Dual symbol .
+  skill_type: 'action'
+  nb: 0
+
+skill35:
+  name: Tough
+  description: The Survivor ignores the first Attack he receives from a single Zombie every Zombies’ Phase.
+  skill_type: 'action'
+  nb: 0
+
+skill36:
+  name:  Trick shot
+  description: When the Survivor is equipped with Dual Ranged weapons, he can aim at targets in different Zones with each weapon in the same Action.
+  skill_type: 'action'
+  nb: 0
