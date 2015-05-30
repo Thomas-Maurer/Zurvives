@@ -14,7 +14,11 @@ zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
         .state('register', {
             url: "/register",
             templateUrl: "partials/register.html"
-        });
+        })
+        .state('login', {
+            url: "/login",
+            templateUrl: "partials/login.html"})
+    ;
 
 
     $authProvider.configure({
