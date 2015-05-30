@@ -29,3 +29,4 @@ The server use a Ruby on Rails structure. The vagrant configuration can be found
 * Start Rails server : ``` rails s -b 0.0.0.0 ```
 
 * Load fixtures : ``` rake db:fixtures:load ```
+* Load mailcatcher : ``` mailcatcher --http-ip=0.0.0.0 ```
