@@ -10,5 +10,6 @@ Adaptation of Zombicide
 
 
 ## Usefull cmd
-create a `bower.json` in `vendor/assets` and use : 
->```rake bower:install```
+
+Install Bower dependencies : 
+```rake bower:install```
