@@ -16,6 +16,7 @@ Adaptation of Zombicide
 * [Bower-rails](https://github.com/rharriso/bower-rails)
 * Angular
 * Rails
+* Nodejs
 * [Mailcatcher](http://mailcatcher.me/) - *dev mail*
 
 ## Server
