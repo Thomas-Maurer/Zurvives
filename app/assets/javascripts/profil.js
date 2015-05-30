@@ -14,7 +14,7 @@ zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
                     // or server returns response with an error status.
                 });
     })
-        .catch(function (resp){debugger;
+        .catch(function (resp){
             //if not logged redirect to login form
             $location.path("/login");
         });

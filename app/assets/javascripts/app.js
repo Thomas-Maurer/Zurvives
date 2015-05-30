@@ -17,10 +17,8 @@ zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
         })
         .state('login', {
             url: "/login",
-            templateUrl: "partials/login.html"})
-    ;
+            templateUrl: "partials/login.html"
         });
-
     $authProvider.configure({
         apiUrl: ''
         ,
@@ -29,3 +27,4 @@ zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
         }
     });
 
+});
