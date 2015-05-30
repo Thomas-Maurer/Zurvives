@@ -45,6 +45,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Install devise for User login and Suscribe
 gem 'devise'
 
+#Allow rails to do MTI ( multiple-table-inheritance )
+gem 'active_record-acts_as'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
