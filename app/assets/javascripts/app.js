@@ -21,7 +21,6 @@ zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
     ;
         });
 
-
     $authProvider.configure({
         apiUrl: ''
         ,
