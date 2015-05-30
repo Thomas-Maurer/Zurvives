@@ -1,35 +1,21 @@
 zurvives.controller('ProfilCtrl', function($scope, $auth, $location) {
-    $scope.logout = false;
+    $auth.validateUser()
+        .then(function(resp){
+            $scope.logout = true;
+            $scope.currentUser = resp;
+    })
+        .catch(function (resp){debugger;
+            //if not logged redirect to login form
+            $location.path("/login");
+        });
 
-
-    $scope.handleRegBtnClick = function() {
-        $auth.submitRegistration($scope.registrationForm)
-            .then(function(resp) {
-                // handle success response
-                $location.path("/profil");
-            })
-            .catch(function(resp) {
-                // handle error response
-            });
-    };
-
-
-    $scope.handleLoginBtnClick = function() {
-        $auth.submitLogin($scope.loginForm)
-            .then(function(resp) {
-                // handle success response
-                $scope.logout = true;
-            })
-            .catch(function(resp) {
-                // handle error response
-            });
-    };
-
+    //Logout
     $scope.handleSignOutBtnClick = function() {
         $auth.signOut()
             .then(function(resp) {
                 // handle success response
                 $scope.logout = false;
+                $location.path('/login');
             })
             .catch(function(resp) {
                 // handle error response
