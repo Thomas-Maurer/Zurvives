@@ -18,7 +18,6 @@ zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
             //if not logged redirect to login form
             $location.path("/login");
         });
-
     //Logout
     $scope.handleSignOutBtnClick = function() {
         $auth.signOut()
