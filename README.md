@@ -24,5 +24,5 @@ The server use a Ruby on Rails structure. The vagrant configuration can be found
 
 ## Usefull commands
 
-* Install Bower dependencies : ``` Ruby rake bower:install ```
-* Start Rails server : ``` Ruby rails s -b 0.0.0.0 ```
+* Install Bower dependencies : ``` rake bower:install ```
+* Start Rails server : ``` rails s -b 0.0.0.0 ```
