@@ -56,5 +56,6 @@ Rails.application.routes.draw do
   #   end
   root to: 'page#index'
   get 'test_user' => 'profil#members_only'
+  get 'getuser' => 'user#getUser'
 
 end
