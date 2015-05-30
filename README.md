@@ -18,14 +18,12 @@ Adaptation of Zombicide
 * Rails
 * [Mailcatcher](http://mailcatcher.me/) - *dev mail*
 
-----------------------------------------
-
 ## Server
 
 The server use a Ruby on Rails structure. The vagrant configuration can be found at the [vagrant project repository](https://github.com/Metali/Vagrant_init)
 
 ## Usefull commands
 
-Install Bower dependencies : ``` Ruby rake bower:install ```
+* Install Bower dependencies : ``` Ruby rake bower:install ```
 
-Start rails server : ``` Ruby rails s -b 0.0.0.0 ```
+* Start Rails server : ``` Ruby rails s -b 0.0.0.0 ```
