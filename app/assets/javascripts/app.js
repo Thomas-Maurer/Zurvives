@@ -9,7 +9,7 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
     $stateProvider
         .state('home', {
             url: "/",
-            templateUrl: "views/home.html"
+            templateUrl: "partials/home.html"
         })
         .state('profil', {
             url: "/profil",
