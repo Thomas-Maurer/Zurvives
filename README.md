@@ -18,6 +18,7 @@ Adaptation of Zombicide
 * Rails
 * Nodejs
 * [Mailcatcher](http://mailcatcher.me/) - *dev mail*
+* Susy
 
 ## Server
 
