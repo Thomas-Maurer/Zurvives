@@ -6,6 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+
+######## Weapons #####
 Weapon.create(name: 'Baseball bat', description: '', image: '', range: '0', damage: 1, dice: 1,
               dice_to_success: 3, allow_open_door: false, silent_kill: true, silent_door: false,
               ambidextry: false)
@@ -57,3 +59,15 @@ Weapon.create(name: 'Hatchet', description: '', image: '', range: '0', damage: 1
 Weapon.create(name: 'Kitchen knife', description: '', image: '', range: '0', damage: 1, dice: 1,
               dice_to_success: 5, allow_open_door: false, silent_kill: true, silent_door: false,
               ambidextry: true)
+
+######## Special Abilities #####
+
+SpecialAbility.create(id: 1, name: 'Avoid 1 damage', description: 'Allow user to avoid 1 damage discard after use')
+SpecialAbility.create(id: 2, name: 'Reload for use', description: 'The user must use 1 action to reload and use again')
+SpecialAbility.create(id: 3, name: 'Heal', description: 'Heal 1 wounded')
+
+######## Initialize some weapon with a special ability ########
+
+@equip = Equipment.find(9)
+@equip.special_ability = SpecialAbility.find(2)
+@equip.save

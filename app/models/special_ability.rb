@@ -1,3 +1,3 @@
 class SpecialAbility < ActiveRecord::Base
-  belongs_to :equipment
+  has_many :equipments
 end
