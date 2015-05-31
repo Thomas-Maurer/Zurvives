@@ -49,6 +49,9 @@ gem 'active_model_serializers'
 #Allow rails to do MTI ( multiple-table-inheritance )
 gem 'active_record-acts_as'
 
+#Allow rails to do MTI ( multiple-table-inheritance )
+gem 'active_record-acts_as'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
