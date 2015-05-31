@@ -1,0 +1,42 @@
+.span1  { @include span(1 of 12 no-gutters); min-height: 1px;}
+.span2  { @include span(2 of 12 no-gutters); min-height: 1px;}
+.span3  { @include span(3 of 12 no-gutters); min-height: 1px;}
+.span4  { @include span(4 of 12 no-gutters); min-height: 1px;}
+.span5  { @include span(5 of 12 no-gutters); min-height: 1px;}
+.span6  { @include span(6 of 12 no-gutters); min-height: 1px;}
+.span7  { @include span(7 of 12 no-gutters); min-height: 1px;}
+.span8  { @include span(8 of 12 no-gutters); min-height: 1px;}
+.span9  { @include span(9 of 12 no-gutters); min-height: 1px;}
+.span10 { @include span(10 of 12 no-gutters); min-height: 1px;}
+.span11 { @include span(11 of 12 no-gutters); min-height: 1px;}
+.span12 { @include span(12 of 12 no-gutters); min-height: 1px;}
+
+@include breakpoint($phone) {
+  .phone1  { @include span(1 of 12 no-gutters); min-height: 1px;}
+  .phone2  { @include span(2 of 12 no-gutters); min-height: 1px;}
+  .phone3  { @include span(3 of 12 no-gutters); min-height: 1px;}
+  .phone4  { @include span(4 of 12 no-gutters); min-height: 1px;}
+  .phone5  { @include span(5 of 12 no-gutters); min-height: 1px;}
+  .phone6  { @include span(6 of 12 no-gutters); min-height: 1px;}
+  .phone7  { @include span(7 of 12 no-gutters); min-height: 1px;}
+  .phone8  { @include span(8 of 12 no-gutters); min-height: 1px;}
+  .phone9  { @include span(9 of 12 no-gutters); min-height: 1px;}
+  .phone10 { @include span(10 of 12 no-gutters); min-height: 1px;}
+  .phone11 { @include span(11 of 12 no-gutters); min-height: 1px;}
+  .phone12 { @include span(12 of 12 no-gutters); min-height: 1px;}
+}
+
+@include breakpoint($tablet) {
+  .tablet1   { @include span(1 of 12 no-gutters); min-height: 1px; }
+  .tablet2   { @include span(2 of 12 no-gutters); min-height: 1px; }
+  .tablet3   { @include span(3 of 12 no-gutters); min-height: 1px; }
+  .tablet4   { @include span(4 of 12 no-gutters); min-height: 1px; }
+  .tablet5   { @include span(5 of 12 no-gutters); min-height: 1px; }
+  .tablet6   { @include span(6 of 12 no-gutters); min-height: 1px; }
+  .tablet7   { @include span(7 of 12 no-gutters); min-height: 1px; }
+  .tablet8   { @include span(8 of 12 no-gutters); min-height: 1px; }
+  .tablet9   { @include span(9 of 12 no-gutters); min-height: 1px; }
+  .tablet10  { @include span(10 of 12 no-gutters); min-height: 1px; }
+  .tablet11  { @include span(11 of 12 no-gutters); min-height: 1px; }
+  .tablet12  { @include span(12 of 12 no-gutters); min-height: 1px; }
+}
