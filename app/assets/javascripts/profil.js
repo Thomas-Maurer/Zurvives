@@ -3,7 +3,7 @@ zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
     $auth.validateUser()
         .then(function(resp){
             $scope.logout = true;
-            $http.get('/getuser').
+            $http.get('/api/getuser').
                 success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
