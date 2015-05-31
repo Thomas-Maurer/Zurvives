@@ -60,4 +60,7 @@ Rails.application.routes.draw do
   get 'test_user' => 'profil#members_only'
   get 'getuser' => 'user#getUser'
 
+  # Will redirect all others path to angular config
+  get '*path' => 'page#index'
+
 end

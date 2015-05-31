@@ -1,6 +1,10 @@
 var zurvives = angular.module('zurvives', ['ui.router', 'ng-token-auth']);
-zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
-    $urlRouterProvider.otherwise("/");
+zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $authProvider,$locationProvider) {
+
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
 
     $stateProvider
         .state('home', {
@@ -19,12 +23,13 @@ zurvives.config(function($stateProvider, $urlRouterProvider, $authProvider) {
             url: "/login",
             templateUrl: "partials/login.html"
         });
+    $urlRouterProvider.otherwise("/");
+
     $authProvider.configure({
-        apiUrl: ''
-        ,
+        apiUrl: '',
         handleLoginResponse: function (response) {
             return response.data;
         }
     });
 
-});
+}]);
