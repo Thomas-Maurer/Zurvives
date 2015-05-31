@@ -58,7 +58,13 @@ Rails.application.routes.draw do
   #   end
   root to: 'page#index'
   get 'test_user' => 'profil#members_only'
-  get 'getuser' => 'user#getUser'
+
+  #Route API
+  get 'api/getuser' => 'user#getUser'
+  get 'api/equipments' => 'equipment#equipments'
+  get 'api/equipments/:id' => 'equipment#equipment'
+  get 'api/weapons/' => 'equipment#weapons'
+  get 'api/weapons/:id' => 'equipment#weapon'
 
   # Will redirect all others path to angular config
   get '*path' => 'page#index'

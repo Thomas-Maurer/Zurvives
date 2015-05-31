@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529133637) do
+ActiveRecord::Schema.define(version: 20150531105715) do
+
+  create_table "equipment", force: :cascade do |t|
+    t.string   "name",               limit: 255
+    t.text     "description",        limit: 65535
+    t.string   "image",              limit: 255
+    t.integer  "actable_id",         limit: 4
+    t.string   "actable_type",       limit: 255
+    t.integer  "special_ability_id", limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "equipment", ["special_ability_id"], name: "index_equipment_on_special_ability_id", using: :btree
 
   create_table "skills", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -20,6 +33,13 @@ ActiveRecord::Schema.define(version: 20150529133637) do
     t.integer  "nb",          limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "special_abilities", force: :cascade do |t|
+    t.string   "description", limit: 255
+    t.string   "name",        limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,5 +70,16 @@ ActiveRecord::Schema.define(version: 20150529133637) do
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
+
+  create_table "weapons", force: :cascade do |t|
+    t.string  "range",           limit: 255
+    t.integer "damage",          limit: 4
+    t.integer "dice",            limit: 4
+    t.integer "dice_to_success", limit: 4
+    t.boolean "allow_open_door", limit: 1
+    t.boolean "silent_kill",     limit: 1
+    t.boolean "silent_door",     limit: 1
+    t.boolean "ambidextry",      limit: 1
+  end
 
 end
