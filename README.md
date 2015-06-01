@@ -31,3 +31,11 @@ The server use a Ruby on Rails structure. The vagrant configuration can be found
 
 * Load fixtures : ``` rake db:fixtures:load ```
 * Load mailcatcher : ``` mailcatcher --http-ip=0.0.0.0 ```
+
+## Node
+* go to node-zurvives folder
+* Install npm dependencies dependencies : ``` npm install ```
+* Start node server : ``` node app.js ```
+
+The default port is 8000
+
