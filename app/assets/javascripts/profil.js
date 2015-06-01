@@ -1,4 +1,4 @@
-zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
+zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http, socket) {
 
     $auth.validateUser()
         .then(function(resp){
