@@ -11,9 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531105715) do
+ActiveRecord::Schema.define(version: 20150616065058) do
 
-  create_table "equipment", force: :cascade do |t|
+  create_table "character_equipements", force: :cascade do |t|
+    t.integer "character_id",  limit: 4
+    t.integer "equipement_id", limit: 4
+  end
+
+  add_index "character_equipements", ["character_id"], name: "index_character_equipements_on_character_id", using: :btree
+  add_index "character_equipements", ["equipement_id"], name: "index_character_equipements_on_equipement_id", using: :btree
+
+  create_table "character_skills", force: :cascade do |t|
+    t.integer "character_id", limit: 4
+    t.integer "skill_id",     limit: 4
+  end
+
+  add_index "character_skills", ["character_id"], name: "index_character_skills_on_character_id", using: :btree
+  add_index "character_skills", ["skill_id"], name: "index_character_skills_on_skill_id", using: :btree
+
+  create_table "characters", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "characters", ["user_id"], name: "index_characters_on_user_id", using: :btree
+
+  create_table "equipments", force: :cascade do |t|
     t.string   "name",               limit: 255
     t.text     "description",        limit: 65535
     t.string   "image",              limit: 255
@@ -24,7 +49,7 @@ ActiveRecord::Schema.define(version: 20150531105715) do
     t.datetime "updated_at",                       null: false
   end
 
-  add_index "equipment", ["special_ability_id"], name: "index_equipment_on_special_ability_id", using: :btree
+  add_index "equipments", ["special_ability_id"], name: "index_equipments_on_special_ability_id", using: :btree
 
   create_table "skills", force: :cascade do |t|
     t.string   "name",        limit: 255

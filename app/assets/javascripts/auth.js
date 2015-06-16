@@ -46,6 +46,7 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
             });
     };
 
+
     //socket.on('broadcastZurive', function(result){
      //   console.log(result);
     //});
