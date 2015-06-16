@@ -39,3 +39,14 @@ The server use a Ruby on Rails structure. The vagrant configuration can be found
 
 The default port is 8000
 
+## Database
+
+go to `config/` and execute following commands :
+> cp database.yml.dist database.yml
+> cp cp secrets.yml.dist secrets.yml
+
+Then go to the root path of our directory and execute 
+
+> rake db:create
+> rake db:reset
+
