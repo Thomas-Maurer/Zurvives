@@ -32,6 +32,7 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
             })
             .catch(function(resp) {
                 // handle error response
+                $scope.errors = resp.data.errors.full_messages[0];
             });
     };
 

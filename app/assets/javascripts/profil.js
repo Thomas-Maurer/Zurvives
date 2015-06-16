@@ -10,6 +10,7 @@ zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
                     $scope.currentUser = data.user;
                 }).
                 error(function(data, status, headers, config) {
+                    $scope.errors = resp.data.errors.full_messages[0];
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                 });
