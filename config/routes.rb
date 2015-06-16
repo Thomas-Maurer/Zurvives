@@ -2,6 +2,15 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
   namespace :api do
     resources :skills
+    resources :characters
+
+    #character_skill
+    post 'add_skill/:character/:skill'   => 'character_skills#add_skill'
+    delete 'add_skill/:character/:skill' => 'character_skills#remove_skill'
+
+    #character_equipement
+    post 'add_skill/:character/:equipement'   => 'character_equipements#add_equipement'
+    delete 'add_skill/:character/:equipement' => 'character_equipements#remove_equipement'
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
