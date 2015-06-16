@@ -22,6 +22,14 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
         .state('login', {
             url: "/login",
             templateUrl: "partials/login.html"
+        })
+        .state('lobby', {
+            url: "/lobby",
+            templateUrl: "partials/lobby.html"
+        })
+        .state('room', {
+            url: "/room",
+            templateUrl: "partials/room.html"
         });
     $urlRouterProvider.otherwise("/");
 
