@@ -1,8 +1,11 @@
 var http = require('http');
-var Base = require('Class/Base');
 var fs = require('fs');
-fs.readdirSync(__dirname + '/sockets').forEach(function(file) {
-    if (~file.indexOf('.js')) require(__dirname + '/sockets/' + file);
+var Room = require('./models/Room');
+var Player = require('./models/Player');
+var Character = require('./models/Character');
+
+fs.readdirSync(__dirname + '/models').forEach(function(file) {
+    if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
 });
 
 httpServer = http.createServer(function(req, res){
