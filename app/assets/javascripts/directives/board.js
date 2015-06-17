@@ -167,6 +167,7 @@ zurvives.directive('board', function($http, boardData) {
 				player = new createjs.Shape();
 				player.graphics.beginFill("red").drawCircle(0,0,10);
 				moveTo(player, 34, 0);
+				player.Zone = 19;
 				stage.addChild(player);
 				stage.update();
 			}
@@ -178,10 +179,13 @@ zurvives.directive('board', function($http, boardData) {
 			}
 
 			function canMoveTo(e) {
-				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone) {
+				// debugger;
+				var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
+				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
 					moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
 					player.Zone = e.currentTarget.Zone;
-					console.log(e.currentTarget.Zone);
+				} else {
+					console.log("Vous ne passerez pas!!");
 				}
 			}
 
