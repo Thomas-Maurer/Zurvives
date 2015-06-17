@@ -53,6 +53,7 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             url: "/games/:id",
             templateUrl: "partials/games/show.html",
             controller: "GameController"
+        })
         .state('board', {
             url: "/board",
             templateUrl: "partials/board.html"
