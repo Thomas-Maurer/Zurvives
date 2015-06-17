@@ -17,6 +17,7 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
             })
             .catch(function(resp) {
                 // handle error response
+                $scope.errors = resp.data.errors.full_messages[0];
             });
     };
 
@@ -31,6 +32,7 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
             })
             .catch(function(resp) {
                 // handle error response
+                $scope.errors = resp.data.errors.full_messages[0];
             });
     };
 
@@ -46,7 +48,8 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
             });
     };
 
-    /*socket.on('broadcastZurive', function(result){
-        console.log(result);
-    }); */
+
+    //socket.on('broadcastZurive', function(result){
+     //   console.log(result);
+    //});
 });

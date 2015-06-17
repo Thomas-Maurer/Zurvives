@@ -1,4 +1,13 @@
 var http = require('http');
+var fs = require('fs');
+var Room = require('./models/Room');
+var Player = require('./models/Player');
+var Character = require('./models/Character');
+
+fs.readdirSync(__dirname + '/models').forEach(function(file) {
+    if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
+});
+
 httpServer = http.createServer(function(req, res){
 });
 
