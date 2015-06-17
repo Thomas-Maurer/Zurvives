@@ -19,6 +19,7 @@ zurvives.directive('board', function($http, boardData) {
 			tilesetImage.onload = drawImage;
 
 			var stage = new createjs.Stage(element[0]);
+			stage.enableMouseOver();
 			var tileSize = boardData.dataJson.tilewidth;       // The size of a tile (32×32)
 			var rowTileCount = boardData.dataJson.width;   // The number of tiles in a row of our background
 			var colTileCount = boardData.dataJson.height;   // The number of tiles in a column of our background
@@ -26,6 +27,11 @@ zurvives.directive('board', function($http, boardData) {
 
 			scope.boardWidth = tileSize * rowTileCount;
 			scope.boardHeight = tileSize * colTileCount;
+
+			// Get different layers from json
+			var layerZones = boardData.layer2d["Zones"];
+
+			console.log(layerZones);
 
 			function drawImage () {
 				var imageData = {
@@ -56,6 +62,7 @@ zurvives.directive('board', function($http, boardData) {
 						cellBitmap.gotoAndStop(layerData[x][y] - 1);
 						cellBitmap.x = tileSize * y;
 						cellBitmap.y = tileSize * x;
+						cellBitmap.addEventListener("click", test);
 						stage.addChild(cellBitmap);
 					};
 				};
@@ -64,12 +71,25 @@ zurvives.directive('board', function($http, boardData) {
 				initPlayer();
 			}
 
+			var circle;
+
 			function initPlayer() {
-				var circle = new createjs.Shape();
+				circle = new createjs.Shape();
 				circle.graphics.beginFill("red").drawCircle(0,0,10);
-				circle.x = circle.y = 25;
+				moveTo(circle, 35, 1);
 				stage.addChild(circle);
 				stage.update();
+			}
+
+			function moveTo(object, x, y) {
+				object.x= x*tileSize + tileSize/2;
+				object.y =y*tileSize + tileSize/2;
+				stage.update();
+			}
+
+			function test(e) {
+				moveTo(circle, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+				console.log(e);
 			}
 
 		});
