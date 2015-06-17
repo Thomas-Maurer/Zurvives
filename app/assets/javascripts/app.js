@@ -11,10 +11,6 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             url: "/",
             templateUrl: "partials/home.html"
         })
-        .state('profil', {
-            url: "/profil",
-            templateUrl: "partials/profil.html"
-        })
         .state('register', {
             url: "/register",
             templateUrl: "partials/register.html"
@@ -23,13 +19,40 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             url: "/login",
             templateUrl: "partials/login.html"
         })
-        .state('lobby', {
-            url: "/lobby",
-            templateUrl: "partials/lobby.html"
+        .state('profil', {
+            url: "/profil",
+            templateUrl: "partials/profil.html",
+            onEnter: function (authService, $location) {
+                authService.isAuth();
+            }
         })
-        .state('room', {
-            url: "/room",
-            templateUrl: "partials/room.html"
+        .state('characters',{
+            url: "/characters",
+            templateUrl: "partials/characters/index.html",
+            controller: "CharactersController",
+            onEnter: function (authService) {
+                authService.isAuth();
+            }
+        })
+        .state('characters.character', {
+            url: "/character/:id",
+            templateUrl: "partials/characters/show.html",
+            controller: "CharacterController"
+        })
+        .state('games', {
+            url: "/games",
+            templateUrl: "partials/games/index.html",
+            controller: "GamesController",
+            onEnter: function (authService) {
+                if (authService.needsLogin) {
+                    return authService.showLogin();
+                }
+            }
+        })
+        .state('games.room', {
+            url: "/games/:id",
+            templateUrl: "partials/games/show.html",
+            controller: "GameController"
         })
         .state('board', {
             url: "/board",
