@@ -1,4 +1,10 @@
 var http = require('http');
+var Base = require('Class/Base');
+var fs = require('fs');
+fs.readdirSync(__dirname + '/sockets').forEach(function(file) {
+    if (~file.indexOf('.js')) require(__dirname + '/sockets/' + file);
+});
+
 httpServer = http.createServer(function(req, res){
 });
 
