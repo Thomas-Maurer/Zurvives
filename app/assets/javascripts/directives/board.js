@@ -167,10 +167,7 @@ zurvives.directive('board', function($http, boardData) {
 				player = new createjs.Shape();
 				player.graphics.beginFill("red").drawCircle(0,0,10);
 				moveTo(player, 34, 0);
-<<<<<<< HEAD
 				player.Zone = 19;
-=======
->>>>>>> 50cf6a054b36ed61e962f761205d27c0db0b32b6
 				stage.addChild(player);
 				stage.update();
 			}
@@ -182,7 +179,6 @@ zurvives.directive('board', function($http, boardData) {
 			}
 
 			function canMoveTo(e) {
-<<<<<<< HEAD
 				// debugger;
 				var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
@@ -190,12 +186,6 @@ zurvives.directive('board', function($http, boardData) {
 					player.Zone = e.currentTarget.Zone;
 				} else {
 					console.log("Vous ne passerez pas!!");
-=======
-				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone) {
-					moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-					player.Zone = e.currentTarget.Zone;
-					console.log(e.currentTarget.Zone);
->>>>>>> 50cf6a054b36ed61e962f761205d27c0db0b32b6
 				}
 			}
 
