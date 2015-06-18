@@ -3,4 +3,5 @@ class CharacterSerializer < ActiveModel::Serializer
 
   belongs_to :user
   has_many :skills, through: :character_skills
+  has_one :level
 end
