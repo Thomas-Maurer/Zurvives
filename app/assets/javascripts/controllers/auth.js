@@ -2,7 +2,7 @@
  * Created by Wellan on 30/05/2015.
  */
 
-zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
+zurvives.controller('AuthCtrl', function($scope,socket, $auth, $location,authService) {
     $auth.validateUser()
         .then(function(resp){
             $location.path('/profil');
@@ -23,10 +23,10 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
 
 //Login
     $scope.handleLoginBtnClick = function() {
-        //socket.emit('zurvive', {'survive': 'survive'})
         $auth.submitLogin($scope.loginForm)
             .then(function(resp) {
                 // handle success response
+                authService.onLogin();
                 $scope.logout = true;
                 $location.path('/profil');
             })
@@ -47,9 +47,4 @@ zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
                 // handle error response
             });
     };
-
-
-    //socket.on('broadcastZurive', function(result){
-     //   console.log(result);
-    //});
 });

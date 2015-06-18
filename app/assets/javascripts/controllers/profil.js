@@ -1,4 +1,5 @@
 zurvives.controller('ProfilCtrl', function($scope, $auth, $location, $http) {
+    $scope.logout = true;
     $scope.handleSignOutBtnClick = function() {
         $auth.signOut()
             .then(function(resp) {

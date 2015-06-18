@@ -1,5 +1,5 @@
 var zurvives = angular.module('zurvives', ['ui.router', 'ng-token-auth']);
-zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $authProvider,$locationProvider) {
+zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -26,7 +26,7 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
                 authService.isAuth();
             }
         })
-        .state('characters',{
+        .state('characters', {
             url: "/characters",
             templateUrl: "partials/characters/index.html",
             controller: "CharactersController",
@@ -44,20 +44,15 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             templateUrl: "partials/games/index.html",
             controller: "GamesController",
             onEnter: function (authService) {
-                if (authService.needsLogin) {
-                    return authService.showLogin();
-                }
+                authService.isAuth();
             }
         })
-        .state('games.room', {
-            url: "/games/:id",
-            templateUrl: "partials/games/show.html",
-            controller: "GameController"
-        })
-        .state('board', {
-            url: "/board",
-            templateUrl: "partials/board.html"
+        .state('play', {
+            url: "/game/:slug",
+            templateUrl: "/partials/games/singleGame.html",
+            controller: "singleGameController"
         });
+
     $urlRouterProvider.otherwise("/");
 
     $authProvider.configure({

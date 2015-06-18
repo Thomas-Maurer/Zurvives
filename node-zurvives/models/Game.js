@@ -1,6 +1,6 @@
 var Base = require('./../Class/Base');
 
-var Room = Class.extend({
+var Game = Class.extend({
     playerLimit: 5,
     playerList: [],
 
@@ -11,20 +11,19 @@ var Room = Class.extend({
      * @param owner
      * @param maxPlayer
      */
-    init: function (id, name, owner, maxPlayer) {
-        this.id = id;
+    init: function (name, owner, maxPlayer) {
         this.name = name;
         this.owner = owner;
         this.maxPlayer = maxPlayer;
     },
     addPlayer: function(player) {
-
+        playerList.push(player);
+    },
+    getPlayerList: function(){
+       return this.playerList;
     },
     removePlayer: function(id) {
 
-    },
-    getPlayer: function(id) {
-
     }
 });
-module.exports = Room;
+module.exports = Game;

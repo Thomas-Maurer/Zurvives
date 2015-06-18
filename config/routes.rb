@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   root to: 'page#index'
+  get 'game/:id' => 'page#index'
   get 'test_user' => 'profil#members_only'
 
   #Route API
@@ -77,5 +78,4 @@ Rails.application.routes.draw do
 
   # Will redirect all others path to angular config
   get '*path' => 'page#index'
-
 end
