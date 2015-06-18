@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616065058) do
+ActiveRecord::Schema.define(version: 20150618064809) do
 
   create_table "character_equipements", force: :cascade do |t|
     t.integer "character_id",  limit: 4
@@ -50,6 +50,24 @@ ActiveRecord::Schema.define(version: 20150616065058) do
   end
 
   add_index "equipments", ["special_ability_id"], name: "index_equipments_on_special_ability_id", using: :btree
+
+  create_table "games", force: :cascade do |t|
+    t.integer "user_id", limit: 4
+    t.string  "name",    limit: 255
+    t.boolean "finish",  limit: 1
+    t.integer "turn",    limit: 4
+  end
+
+  add_index "games", ["turn"], name: "index_games_on_turn", using: :btree
+  add_index "games", ["user_id"], name: "index_games_on_user_id", using: :btree
+
+  create_table "levels", force: :cascade do |t|
+    t.integer "character_id", limit: 4
+    t.integer "level",        limit: 4
+    t.integer "exp",          limit: 4
+  end
+
+  add_index "levels", ["character_id"], name: "index_levels_on_character_id", using: :btree
 
   create_table "skills", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -107,4 +125,6 @@ ActiveRecord::Schema.define(version: 20150616065058) do
     t.boolean "ambidextry",      limit: 1
   end
 
+  add_foreign_key "games", "users"
+  add_foreign_key "levels", "characters"
 end
