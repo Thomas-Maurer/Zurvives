@@ -1,10 +1,17 @@
 var zurvives = angular.module('zurvives', ['ui.router', 'ng-token-auth']);
-zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
+zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false
     });
+
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        var $state;
+        $state = $injector.get("$state");
+        return $state.go("home");
+    });
+
 
     $stateProvider
         .state('home', {
@@ -22,11 +29,13 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
         .state('profil', {
             url: "/profil",
             templateUrl: "partials/profil.html",
-            onEnter: function (authService, $location) {
+            controller: "ProfilCtrl",
+            onEnter: function (authService) {
                 authService.isAuth();
             }
         })
-        .state('characters', {
+
+        .state('profil.characters',{
             url: "/characters",
             templateUrl: "partials/characters/index.html",
             controller: "CharactersController",
@@ -34,7 +43,7 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
                 authService.isAuth();
             }
         })
-        .state('characters.character', {
+        .state('profil.character', {
             url: "/character/:id",
             templateUrl: "partials/characters/show.html",
             controller: "CharacterController"
@@ -42,7 +51,6 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
         .state('games', {
             url: "/games",
             templateUrl: "partials/games/index.html",
-            controller: "GamesController",
             onEnter: function (authService) {
                 authService.isAuth();
             }

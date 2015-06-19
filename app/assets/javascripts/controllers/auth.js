@@ -1,8 +1,4 @@
-/**
- * Created by Wellan on 30/05/2015.
- */
-
-zurvives.controller('AuthCtrl', function($scope,socket, $auth, $location,authService) {
+zurvives.controller('AuthCtrl', function($scope, $auth, $location,authService, characterService) {
     $auth.validateUser()
         .then(function(resp){
             $location.path('/profil');

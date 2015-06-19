@@ -8,4 +8,6 @@ group :vendor, :assets_path => "assets"  do
     asset 'susy'
     asset 'breakpoint-sass'
     asset 'underscore'
+    asset 'underscore.inflection'
+    asset 'angular-resource'
 end

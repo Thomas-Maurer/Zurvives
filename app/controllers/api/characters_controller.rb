@@ -33,7 +33,7 @@ class Api::CharactersController < ApplicationController
   private
 
   def character_params
-    params.require(:character).permit(:name)
+    params.require(:characters).permit(:name)
   end
 
 end

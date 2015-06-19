@@ -17,5 +17,8 @@
 //= require angular-cookie/angular-cookie
 //= require ng-token-auth/dist/ng-token-auth
 //= require underscore/underscore-min
-//= require_tree
+//= require underscore.inflection/lib/underscore.inflection
+//= require_tree .
+
+
 

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
     #character_skill
     post 'add_skill/:character/:skill'   => 'character_skills#add_skill'
-    delete 'add_skill/:character/:skill' => 'character_skills#remove_skill'
+    delete 'remove_skill/:character/:skill' => 'character_skills#remove_skill'
 
     #character_equipement
     post 'add_skill/:character/:equipement'   => 'character_equipements#add_equipement'
