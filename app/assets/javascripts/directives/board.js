@@ -14,83 +14,15 @@ zurvives.directive('board', function($http, boardData) {
 
 			var boardGround = boardData.layer2d["Board"];
 
-			var neighboorZones = {
-				1: [2],
-				2: [1,5],
-				3: [4],
-				4: [3,5],
-				5: [2,4,6,23],
-				6: [5,7],
-				7: [6,8,29],
-				8: [7,9],
-				9: [8,10,43],
-				10: [9,11],
-				11: [10,12,44],
-				12: [11,13],
-				13: [12,14,70],
-				14: [13,15],
-				15: [14,16,22],
-				16: [15,17],
-				17: [16,18],
-				18: [17,19],
-				19: [18,20],
-				20: [19,21],
-				21: [20,22],
-				22: [15,21],
-				23: [5,24],
-				24: [23,25],
-				25: [24,26],
-				26: [25,27,28],
-				27: [26,36],
-				28: [26,32],
-				29: [7,30],
-				30: [29,31,45],
-				31: [30,32],
-				32: [28,31,33],
-				33: [32,38],
-				34: [35],
-				35: [34,36],
-				36: [27,35,37],
-				37: [36,38],
-				38: [33,37,39],
-				39: [38,41],
-				41: [39,42],
-				42: [41,52],
-				43: [9,46],
-				44: [11,48],
-				45: [30,46],
-				46: [43,45,47],
-				47: [46,48],
-				48: [44,47,49],
-				49: [48,50],
-				50: [49,51],
-				51: [50,52],
-				52: [42,51,53,55],
-				53: [52,54],
-				54: [53],
-				55: [52,56],
-				56: [55,57,62],
-				57: [56,58],
-				58: [57,59,61],
-				59: [58,60],
-				60: [59],
-				61: [58,65],
-				62: [56,63],
-				63: [62,64,68],
-				64: [63,65],
-				65: [64,66],
-				66: [65,67],
-				67: [66],
-				68: [63,69],
-				69: [68,70],
-				70: [13,69]
-			}
+			var neighboorZones = {};
 
 			var tilesetImage = new Image();
 			tilesetImage.src = '/board/images/tileset.png';
 			tilesetImage.onload = drawImage;
 
 			var stage = new createjs.Stage(element[0]);
+			var container = new createjs.Container();
+			container.name = "tilesContainer";
 			stage.enableMouseOver();
 			var tileSize = boardData.dataJson.tilewidth;       // The size of a tile (32×32)
 			var rowTileCount = boardData.dataJson.width;   // The number of tiles in a row of our background
@@ -131,12 +63,12 @@ zurvives.directive('board', function($http, boardData) {
 						cellBitmap.gotoAndStop(layerData[x][y] - 1);
 						cellBitmap.x = tileSize * y;
 						cellBitmap.y = tileSize * x;
+						cellBitmap.name = 'tile_'+x+'-'+y;
 
 						$.each(boardData.layer2d, function(name, tiles) {
 							if(name !== "Board") {
 								var tile = tiles[x][y];
 								if(tile !== 0) {
-									// cellBitmap.name = name;
 									var results = name.match(/(\d+|\D+)/g);
 									switch(name) {
 										case "Collision":
@@ -153,12 +85,14 @@ zurvives.directive('board', function($http, boardData) {
 						// console.log(cellBitmap);
 
 						cellBitmap.addEventListener("click", canMoveTo);
-						stage.addChild(cellBitmap);
+						container.addChild(cellBitmap);
 					};
 				};
 
+				stage.addChild(container);
 				stage.update();
 				initPlayer();
+				fillNeighboors();
 			}
 
 			var player;
@@ -187,6 +121,64 @@ zurvives.directive('board', function($http, boardData) {
 				} else {
 					console.log("Vous ne passerez pas!!");
 				}
+			}
+
+			function fillNeighboors() {
+				var element;
+				var col;
+				var row;
+				var tiles = container.children;
+				for (var i = 0; i < tiles.length; i++) {
+					element = tiles[i].name.split(/_|-/);
+					col = element[1];
+					row = element[2];
+					if(tiles[i].Zone) {
+						checkNeighboors(tiles[i], col, row);	
+					}
+				};
+
+			}
+
+			function checkNeighboors(tile, colCoord, rowCoord) {
+				var colCoordonates = parseInt(colCoord);
+				var rowCoordonates = parseInt(rowCoord);
+				var tileZone = tile.Zone;
+				var tileUp;
+				var tileDown;
+				var tileLeft;
+				var tileRight;
+
+				// if (colCoordonates !== 0 || rowCoordonates !== 0) {
+					tileUp    = container.getChildByName('tile_' + (colCoordonates-1) + '-' + rowCoordonates);
+					tileDown  = container.getChildByName('tile_' + (colCoordonates+1) + '-' + rowCoordonates);
+					tileLeft  = container.getChildByName('tile_' + colCoordonates + '-' + (rowCoordonates-1));
+					tileRight = container.getChildByName('tile_' + colCoordonates + '-' + (rowCoordonates+1));
+				// };
+
+				var potential = [tileUp, tileDown, tileLeft, tileRight];
+
+				var tileNeigbhoors = new Array();
+
+				for (var l = 0; l < 4; l++) {
+	                if (potential[l] != null && potential[l] != null) {
+	                    tileNeigbhoors.push(potential[l]);
+	                }
+	            }
+
+	            var isInArray;
+
+	            for (var m = 0; m < tileNeigbhoors.length; m++) {
+	            	isInArray = $.inArray(parseInt(tileNeigbhoors[m].Zone), eval('neighboorZones[' +tile.Zone + ']'));
+	            	if(tileNeigbhoors[m].Zone && tileNeigbhoors[m].Zone !== tile.Zone) {
+	            		if(!(eval('neighboorZones[' + tile.Zone +']'))) {
+	            			eval('neighboorZones[' + tile.Zone + '] = []');
+	            		}
+	            		if(isInArray === -1) {
+	            			eval('neighboorZones[' + tile.Zone + '].push(parseInt(tileNeigbhoors[m].Zone))');
+	            		}
+	            	}
+	            };
+
 			}
 
 		});
