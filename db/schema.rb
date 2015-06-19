@@ -13,13 +13,13 @@
 
 ActiveRecord::Schema.define(version: 20150618072022) do
 
-  create_table "character_equipements", force: :cascade do |t|
-    t.integer "character_id",  limit: 4
-    t.integer "equipement_id", limit: 4
+  create_table "character_equipments", force: :cascade do |t|
+    t.integer "character_id", limit: 4
+    t.integer "equipment_id", limit: 4
   end
 
-  add_index "character_equipements", ["character_id"], name: "index_character_equipements_on_character_id", using: :btree
-  add_index "character_equipements", ["equipement_id"], name: "index_character_equipements_on_equipement_id", using: :btree
+  add_index "character_equipments", ["character_id"], name: "index_character_equipments_on_character_id", using: :btree
+  add_index "character_equipments", ["equipment_id"], name: "index_character_equipments_on_equipment_id", using: :btree
 
   create_table "character_games", force: :cascade do |t|
     t.integer "character_id", limit: 4
@@ -40,10 +40,12 @@ ActiveRecord::Schema.define(version: 20150618072022) do
   create_table "characters", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.integer  "user_id",    limit: 4
+    t.integer  "level_id",   limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "characters", ["level_id"], name: "index_characters_on_level_id", using: :btree
   add_index "characters", ["user_id"], name: "index_characters_on_user_id", using: :btree
 
   create_table "equipments", force: :cascade do |t|
