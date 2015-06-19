@@ -2,8 +2,6 @@ var Base = require('./../Class/Base');
 var _ = require('underscore');
 
 var Game = Class.extend({
-    playerLimit: 5,
-    playerList: [],
 
     /**
      * Init function
@@ -16,9 +14,14 @@ var Game = Class.extend({
         this.name = name;
         this.owner = owner;
         this.maxPlayer = maxPlayer;
+        this.playerLimit = 5;
+        this.playerList = [];
     },
     addPlayer: function(player) {
         this.playerList.push(player);
+    },
+    getPlayerFromList: function(socketId) {
+        return _.where(this.playerList, {id: socketId})[0];
     },
     getPlayerList: function(){
        return this.playerList;

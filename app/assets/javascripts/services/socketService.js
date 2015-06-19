@@ -18,6 +18,9 @@ zurvives.factory('socket', function ($rootScope) {
                     }
                 });
             })
+        },
+        removeAllListeners: function() {
+            socket.removeAllListeners();
         }
     };
 });
