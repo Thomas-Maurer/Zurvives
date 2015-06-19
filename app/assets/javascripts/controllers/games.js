@@ -1,6 +1,8 @@
 zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket) {
     $scope.gameName = "";
-
+    $scope.players = [];
+    $scope.listGame = [];
+    
     $scope.createGame = function () {
         if ($scope.gameName.length > 3) {
             socket.emit('games:create', {name: $scope.gameName, maxPlayer: 3});
@@ -17,6 +19,5 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
 
     function redirectToGame(game) {
         $location.path('/game/'+game.name);
-
     }
 });

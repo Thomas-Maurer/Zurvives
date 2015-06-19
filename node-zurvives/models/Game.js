@@ -1,4 +1,5 @@
 var Base = require('./../Class/Base');
+var _ = require('underscore');
 
 var Game = Class.extend({
     playerLimit: 5,
@@ -17,13 +18,14 @@ var Game = Class.extend({
         this.maxPlayer = maxPlayer;
     },
     addPlayer: function(player) {
-        playerList.push(player);
+        this.playerList.push(player);
     },
     getPlayerList: function(){
        return this.playerList;
     },
-    removePlayer: function(id) {
-
+    removePlayer: function(player) {
+        this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {id: player.id}));
+        return this.playerList;
     }
 });
 module.exports = Game;
