@@ -2,7 +2,7 @@
  * Created by Wellan on 30/05/2015.
  */
 
-zurvives.controller('AuthCtrl', function($scope, $auth, $location) {
+zurvives.controller('AuthCtrl', function($scope, $auth, $location, characterService) {
     $auth.validateUser()
         .then(function(resp){
             $location.path('/profil');
