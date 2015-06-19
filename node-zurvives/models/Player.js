@@ -1,10 +1,11 @@
 var Base = require('./../Class/Base');
 
 var Player = Class.extend({
-    characters: [],
-    init: function (id, name) {
+
+    init: function (id, email) {
         this.id = id;
-        this.name = name;
+        this.email = email;
+        this.characters = [];
     },
     addCharacter: function() {
 

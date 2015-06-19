@@ -1,4 +1,4 @@
-zurvives.directive('board', function($http, boardData) {
+zurvives.directive('board', function($http, boardData,socket) {
 	var directive = {
         link: link,
         scope: true,
@@ -110,7 +110,10 @@ zurvives.directive('board', function($http, boardData) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
-			}
+
+                //TODO: add socket
+                socket.emit('stage:move',object);
+            }
 
 			function canMoveTo(e) {
 				// debugger;
