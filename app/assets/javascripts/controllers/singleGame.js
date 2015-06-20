@@ -34,6 +34,8 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         socket.removeAllListeners();
     });
 
-
     /* == Movements = */
+
+    /* == drag map == */
+    jQuery("#map").dragScroll({});
 });
