@@ -1,4 +1,4 @@
-zurvives.controller('ProfilCtrl', function($scope, $auth, $location, characterService, skillService) {
+zurvives.controller('ProfilCtrl', function($scope, $auth, $location, characterService) {
     characterService.all();
     $scope.character = {}
     $scope.logout = true;
