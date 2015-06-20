@@ -50,7 +50,7 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
         })
         .state('games', {
             url: "/games",
-            controller: "GamesController"
+            controller: "GamesController",
             templateUrl: "partials/games/index.html",
             onEnter: function (authService) {
                 authService.isAuth();
