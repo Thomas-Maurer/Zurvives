@@ -6,7 +6,8 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
 
     $scope.createGame = function () {
         if ($scope.gameName.length > 3) {
-            socket.emit('games:create', {name: $scope.gameName, maxPlayer: 3});
+            var maxPlayer = $('select').val();
+            socket.emit('games:create', {name: $scope.gameName, maxPlayer: maxPlayer});
         } else {
             $scope.error = "Le nom de la partie doit avoir plus de 3 lettres";
         }
@@ -19,11 +20,14 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
     socket.on('listGame:redirect', redirectToGame);
 
     function refreshListGame(data) {
+        for (var i in data) {
+            data[i].playerListCount = data[i].playerList.length;
+        }
         $scope.listGame = data;
     }
 
     function redirectToGame(game) {
-        $location.path('/game/' + game.name);
+        $location.path('/game/' + game.slug);
     }
 
     function gameExist() {

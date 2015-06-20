@@ -24,7 +24,6 @@ function characterService(AngularData, $q, $http) {
             _.each(data.characters, function(character){
                 that.lists.push(new Character(character, that));
             })
-            console.log(that);
             return data;
         });
     }

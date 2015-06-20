@@ -20,6 +20,7 @@ exports.initGame = function (io, socket) {
             // Emit
             sendPlayersList(broadcast,currentGame);
             sendPlayersList(socket,currentGame);
+            socket.broadcast.emit('listGame:refresh', listGames);
         });
     }
 
@@ -48,6 +49,7 @@ exports.initGame = function (io, socket) {
                 // If game doesn't have players anymore, delete it
                 if (currentGame.getPlayerList().length == 0) {
                     deleteGame(currentGame);
+                    socket.broadcast.emit('listGame:refresh', listGames);
                 }
             }
         }
@@ -66,7 +68,7 @@ exports.initGame = function (io, socket) {
     }
 
     function getCurrentGame(slug) {
-        return _.where(listGames, {name: slug})[0];
+        return _.where(listGames, {slug: slug})[0];
     }
 
     function deleteGame(game) {

@@ -1,9 +1,28 @@
-
-<p>{{ error }}</p>
-<input type="text" ng-model="gameName" />
-<button class="btn btn-primary btn-lg" ng-click='createGame()'>Create room</button>
-<h2>Games en cours :</h2>
-<div ng-repeat="game in listGame">
-    <a href="/game/{{ game.name }}">{{ game.name }}</a>
+<div id="games" class="span12 tablet12 phone12">
+    <p style="color:red">{{ error }}</p>
+    <div class="form">
+        <input type="text" ng-model="gameName"/>
+        <select>
+            <option value="1">1 player</option>
+            <option value="2">2 players</option>
+            <option value="3">3 players</option>
+            <option value="4">4 players</option>
+            <option value="5">5 players</option>
+        </select>
+        <button class="button" ng-click='createGame()'>Create game</button>
+    </div>
+    <div class="gamelist">
+     <span class="gamelisttitle">
+        <p>Game name</p>
+        <p>Owner</p>
+        <p>Connected</p>
+    </span>
+        <a ng-repeat="game in listGame" href="/game/{{ game.slug }}">
+            <p>{{ game.name }}</p>
+            <p>{{ game.owner }}</p>
+            <p>{{ game.playerListCount }} / {{ game.maxPlayer }}</p>
+        </a>
+    </div>
 </div>
+
 

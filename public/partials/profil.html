@@ -1,5 +1,5 @@
-<div>
-    <div>{{errors}}</div>
-    <button ng-show="logout" class="btn btn-primary btn-lg" ng-click='handleSignOutBtnClick()'>Sign out</button>
-    <p>{{user}}</p>
+<div id="profil" class="span10 tablet12 phone12 centerDiv">
+    <p>{{errors}}</p>
+    <div class="list-content" ng-bind-html="userHTML"></div>
+    <button ng-show="logout" class="button" ng-click='handleSignOutBtnClick()'>Sign out</button>
 </div>

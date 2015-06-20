@@ -1,15 +1,21 @@
+@import "reset";
 @import "susy/sass/susy";
 @import "breakpoint-sass/stylesheets/breakpoint";
 
 /* == Params == */
-@import "params/function";
+@import "params/font";
+@import "params/mixin";
 @import "params/size";
 @import "params/color";
 @import "params/grid";
+@import "params/class";
+
+@import "body";
 
 /* === Partials === */
-@import "partials/page";
 @import "partials/profil";
+@import "partials/games";
+@import "partials/login";
 
 /* == Modules ==*/
 @import "modules/nav";

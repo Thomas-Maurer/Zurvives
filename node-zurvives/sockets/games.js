@@ -17,16 +17,17 @@ exports.initGame = function (io, socket) {
             var game = new Game(name, owner, maxPlayer);
             listGames.push(game);
             socket.emit('listGame:redirect', game);
-            socket.broadcast.emit('listGame:refresh', listGames);
         }
     }
 
     function getGames() {
+        for(var i=0; i > listGames.length;i++) {
+            listGames[i].PlayerList = listGames[i].getPlayerList();
+        }
         socket.emit('listGame:refresh', listGames);
     }
 
     function isGameExist(name) {
-
         return _.where(listGames, {name: name});
     }
 
