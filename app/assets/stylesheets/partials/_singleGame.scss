@@ -1,0 +1,27 @@
+#singleGame {
+  #game-info {
+    width: 200px;
+    height: calc(100% - 50px);
+    position: fixed;
+    z-index: 100;
+    background: $grey2;
+    top: 50px;
+    color: black;
+    h2 {
+      margin: 10px;
+    }
+    div {
+      padding: 5px;
+      width: calc(100% - 10px);
+    }
+  }
+  #map {
+    width: calc(100% - 200px);
+    height: calc(100vh - 50px);
+    overflow: scroll;
+    display: block;
+    margin: 0;
+    margin-left:200px;
+    padding: 0;
+  }
+}

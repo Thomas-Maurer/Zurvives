@@ -1,4 +1,12 @@
-<div ng-repeat="player in players">
-    {{ player.email }}
+<div id="singleGame">
+    <div id="game-info">
+        <h2>Players</h2>
+
+        <div ng-repeat="player in players">
+            {{ player.email }}
+        </div>
+    </div>
+    <div id="map">
+        <canvas id="board-canvas" board width="{{boardWidth}}" height="{{boardHeight}}"></canvas>
+    </div>
 </div>
-<canvas id="board-canvas" board width="{{boardWidth}}" height="{{boardHeight}}"></canvas>

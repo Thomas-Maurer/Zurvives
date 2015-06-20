@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $text;
+  font-size: 15px;
+  background: $grey2;
+}
+
+label, h1, h2, h3, h4, h5, h6 {
+  font-family: $title;
+}

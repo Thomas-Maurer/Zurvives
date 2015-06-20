@@ -20,11 +20,13 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
         })
         .state('register', {
             url: "/register",
-            templateUrl: "partials/register.html"
+            templateUrl: "partials/register.html",
+            controller:'AuthCtrl'
         })
         .state('login', {
             url: "/login",
-            templateUrl: "partials/login.html"
+            templateUrl: "partials/login.html",
+            controller:'AuthCtrl'
         })
         .state('profil', {
             url: "/profil",

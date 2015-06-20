@@ -12,9 +12,9 @@ var Game = Class.extend({
      */
     init: function (name, owner, maxPlayer) {
         this.name = name;
+        this.slug = name.replace(/ /g,"-");
         this.owner = owner;
         this.maxPlayer = maxPlayer;
-        this.playerLimit = 5;
         this.playerList = [];
     },
     addPlayer: function(player) {

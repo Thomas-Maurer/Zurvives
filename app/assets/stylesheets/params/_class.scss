@@ -1,0 +1,37 @@
+.button {
+  background:$red1;
+  color:white;
+  padding:0 10px;
+  display:inline-block;
+  margin:0;
+  border:0;
+  font-family: $title;
+  text-transform: uppercase;
+  cursor:pointer;
+  line-height: 43px;
+}
+input {
+  background:white;
+  padding:10px;
+  display:inline-block;
+  margin:0;
+  border:0;
+  color:black;
+  line-height: 25px;
+}
+.centerDiv {
+  display:block !important;
+  margin:auto !important;
+  position:relative !important;
+  clear: both !important;
+}
+.form {
+  label {
+    padding: 10px;
+    padding-left:0;
+    display: block;
+  }
+  .button {
+    margin-top:20px;
+  }
+}

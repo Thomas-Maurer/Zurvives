@@ -5,6 +5,7 @@ var _ = require('underscore');
 exports.initGame = function (io, socket) {
     socket.on('game:join', joinGame);
     socket.on('game:leave', leaveGame);
+    socket.on('game:players:get', getPlayersList);
     socket.on('deconnection', leaveGame);
     socket.on('game:get', getGame);
 
@@ -13,13 +14,12 @@ exports.initGame = function (io, socket) {
             var broadcast = socket.broadcast.to(data.slug);
             var currentGame = getCurrentGame(data.slug);
             var player = new Player(socket.id, data.user.email);
-
-            // On player Join
             currentGame.addPlayer(player);
 
             // Emit
             sendPlayersList(broadcast,currentGame);
             sendPlayersList(socket,currentGame);
+            socket.broadcast.emit('listGame:refresh', listGames);
         });
     }
 
@@ -41,13 +41,13 @@ exports.initGame = function (io, socket) {
                 if (currentGame.owner == socket.id) {
                     broadcast.emit('game:owner:leave');
                 } else {
-                    broadcast.emit('player:leave', 'mabite');
-                    sendPlayersList(broadcast,currentGame);
+                    broadcast.emit('player:leave',socket.id);
                 }
 
                 // If game doesn't have players anymore, delete it
                 if (currentGame.getPlayerList().length == 0) {
                     deleteGame(currentGame);
+                    socket.broadcast.emit('listGame:refresh', listGames);
                 }
             }
         }
@@ -60,13 +60,19 @@ exports.initGame = function (io, socket) {
         socket.emit('game:get:return', currentGame);
     }
 
+    function getPlayersList(slug){
+        var currentGame = getCurrentGame(slug);
+        var players = currentGame.getPlayerList();
+        socket.emit('game:return:players', players);
+    }
+
     function sendPlayersList(to,currentGame) {
         var players = currentGame.getPlayerList();
         to.emit('game:return:players', players);
     }
 
     function getCurrentGame(slug) {
-        return _.where(listGames, {name: slug})[0];
+        return _.where(listGames, {slug: slug})[0];
     }
 
     function deleteGame(game) {

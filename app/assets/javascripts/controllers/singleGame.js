@@ -6,7 +6,10 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
             $location.path('/games');
-            console.log('game:not_found');
+            socket.emit('game:not_found');
+        } else if(data.playerList.length >= data.maxPlayer){
+            $location.path('/games');
+            socket.emit('game:full');
         } else {
             $scope.currentGame = data;
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
@@ -19,6 +22,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:leave', function (user) {
         console.log("user has leaves : " + user);
+        socket.emit('game:players:get',$scope.slug);
     });
 
     socket.on('game:owner:leave', function () {
@@ -30,6 +34,8 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         socket.removeAllListeners();
     });
 
-
     /* == Movements = */
+
+    /* == drag map == */
+    jQuery("#map").dragScroll({});
 });
