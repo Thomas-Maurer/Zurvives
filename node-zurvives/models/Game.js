@@ -15,7 +15,6 @@ var Game = Class.extend({
         this.slug = name.replace(/ /g,"-");
         this.owner = owner;
         this.maxPlayer = maxPlayer;
-        this.playerLimit = 5;
         this.playerList = [];
     },
     addPlayer: function(player) {

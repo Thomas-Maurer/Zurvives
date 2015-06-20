@@ -1,7 +1,7 @@
 <div id="games" class="span12 tablet12 phone12">
     <p style="color:red">{{ error }}</p>
-    <div class="form">
-        <input type="text" ng-model="gameName"/>
+    <div class="form span10 tablet12 phone12">
+        <input placeholder="Games's name" type="text" ng-model="gameName"/>
         <select>
             <option value="1">1 player</option>
             <option value="2">2 players</option>
@@ -11,16 +11,16 @@
         </select>
         <button class="button" ng-click='createGame()'>Create game</button>
     </div>
-    <div class="gamelist">
-     <span class="gamelisttitle">
-        <p>Game name</p>
-        <p>Owner</p>
-        <p>Connected</p>
+    <div class="gamelist span10 tablet12 phone12">
+     <span class="gamelisttitle span12">
+        <p class="span4 tablet4 phone4">Game name</p>
+        <p class="span4 tablet4 phone4">Owner</p>
+        <p class="span4 tablet4 phone4">Connected</p>
     </span>
-        <a ng-repeat="game in listGame" href="/game/{{ game.slug }}">
-            <p>{{ game.name }}</p>
-            <p>{{ game.owner }}</p>
-            <p>{{ game.playerListCount }} / {{ game.maxPlayer }}</p>
+        <a class="span12" ng-repeat="game in listGame" href="/game/{{ game.slug }}">
+            <p class="span4 tablet4 phone4">{{ game.name }}</p>
+            <p class="span4 tablet4 phone4">{{ game.owner }}</p>
+            <p class="span4 tablet4 phone4">{{ game.playerListCount }} / {{ game.maxPlayer }}</p>
         </a>
     </div>
 </div>

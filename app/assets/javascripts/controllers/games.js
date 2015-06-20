@@ -18,6 +18,8 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
     socket.on('game:exist', gameExist);
     socket.on('listGame:refresh', refreshListGame);
     socket.on('listGame:redirect', redirectToGame);
+    socket.on('game:full', gameFull);
+    socket.on('game:not-found', gameNotFound);
 
     function refreshListGame(data) {
         for (var i in data) {
@@ -32,5 +34,13 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
 
     function gameExist() {
         console.log("Game exists already");
+    }
+
+    function gameFull() {
+        console.log("Game is full");
+    }
+
+    function gameNotFound() {
+        console.log("Game not found");
     }
 });

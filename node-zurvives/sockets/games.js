@@ -21,9 +21,7 @@ exports.initGame = function (io, socket) {
     }
 
     function getGames() {
-        for(var i=0; i > listGames.length;i++) {
-            listGames[i].PlayerList = listGames[i].getPlayerList();
-        }
+
         socket.emit('listGame:refresh', listGames);
     }
 
