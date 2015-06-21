@@ -26,8 +26,8 @@ var Game = Class.extend({
     getPlayerList: function(){
        return this.playerList;
     },
-    removePlayer: function(player) {
-        this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {email: player.email}));
+    removePlayer: function(email) {
+        this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {email: email}));
         return this.playerList;
     }
 });

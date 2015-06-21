@@ -29,7 +29,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         $location.path('/games');
     });
 
-    $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    $scope.$on('$stateChangeStart', function() {
         socket.emit('game:leave', {slug: $scope.slug, user: $scope.user});
         socket.removeAllListeners();
     });

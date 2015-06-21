@@ -22,13 +22,15 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
     socket.on('game:not-found', gameNotFound);
 
     function refreshListGame(data) {
-        if (data.length > 1) {
+        if (data.length != 0) {
             for (var i in data) {
                 data[i].playerListCount = data[i].playerList.length;
             }
             $scope.listGame = data;
+            $scope.gameError = "";
         } else {
             $scope.gameError = "Aucunes parties pour le moment";
+            $scope.listGame = [];
         }
 
     }

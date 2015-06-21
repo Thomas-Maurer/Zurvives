@@ -14,10 +14,10 @@ exports.initGame = function (io, socket) {
             var broadcast = socket.broadcast.to(data.slug);
             var currentGame = getCurrentGame(data.slug);
 
-            var isExist = currentGame.getPlayerFromList(data.user.email);
+            var isPlayerExist = currentGame.getPlayerFromList(data.user.email);
 
-            if(isExist == undefined) {
-                // Players already in game
+            if(isPlayerExist == undefined) {
+                // Player is not in the game
                 var player = new Player(socket.id, data.user.email);
                 currentGame.addPlayer(player);
             }
@@ -39,7 +39,7 @@ exports.initGame = function (io, socket) {
             if (currentGame.getPlayerFromList(data.user.email) != undefined) {
 
                 var broadcast = socket.broadcast.to(data.slug);
-                currentGame.removePlayer({email: data.user.email});
+                currentGame.removePlayer(data.user.email);
 
                 socket.leave(data.slug);
                 // If owner leaves, delete rooms and kick players

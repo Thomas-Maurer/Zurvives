@@ -21,7 +21,6 @@ exports.initGame = function (io, socket) {
     }
 
     function getGames() {
-
         socket.emit('listGame:refresh', listGames);
     }
 
