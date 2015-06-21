@@ -8,6 +8,7 @@ exports.initGame = function (io, socket) {
     socket.on('game:players:get', getPlayersList);
     socket.on('deconnection', leaveGame);
     socket.on('game:get', getGame);
+    socket.on('game:stage:player:move', movePlayerOnStage);
 
     function joinGame(data) {
         socket.join(data.slug ,function(){
@@ -55,6 +56,17 @@ exports.initGame = function (io, socket) {
                 }
             }
         }
+    }
+
+    function movePlayerOnStage (data) {
+        var broadcast = socket.broadcast.to(data.slug);
+        console.log("Player moove on stage server side");
+
+        //Send to all something for update stage
+        broadcast.emit('game:player:move', data);
+
+
+        console.log(data);
     }
 
     /* == Getters and setters == */

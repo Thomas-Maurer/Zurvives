@@ -1,4 +1,4 @@
-zurvives.directive('board', function($http, boardData,socket) {
+zurvives.directive('board', function($http, boardData, socket) {
 	var directive = {
         link: link,
         scope: true,
@@ -6,7 +6,7 @@ zurvives.directive('board', function($http, boardData,socket) {
     };
     return directive;
 	
-	function link(scope, element, attrs) {
+	function link($scope, element, attrs) {
 		boardData.getJson().then(function(data) {
 			boardData.setJson(data);
 			boardData.getLayers();
@@ -29,8 +29,8 @@ zurvives.directive('board', function($http, boardData,socket) {
 			var colTileCount = boardData.dataJson.height;   // The number of tiles in a column of our background
 			var imageNumTiles = boardData.dataJson.width;  // The number of tiles per row in the tileset image
 
-			scope.boardWidth = tileSize * rowTileCount;
-			scope.boardHeight = tileSize * colTileCount;
+            $scope.boardWidth = tileSize * rowTileCount;
+            $scope.boardHeight = tileSize * colTileCount;
 
 			// Get different layers from json
 
@@ -41,7 +41,7 @@ zurvives.directive('board', function($http, boardData,socket) {
 						width: tileSize,
 						height: tileSize,
 						spacing: 0,
-						margin: 0,
+						margin: 0
 					}
 				};
 
@@ -84,47 +84,52 @@ zurvives.directive('board', function($http, boardData,socket) {
 
 						// console.log(cellBitmap);
 
-						cellBitmap.addEventListener("click", canMoveTo);
+						cellBitmap.addEventListener("click", $scope.canMoveTo);
 						container.addChild(cellBitmap);
 					};
 				};
 
 				stage.addChild(container);
 				stage.update();
-				initPlayer();
+                $scope.stage = stage;
+				$scope.initPlayer();
 				fillNeighboors();
 			}
 
 			var player;
 
-			function initPlayer() {
+            $scope.initPlayer = function initPlayer() {
 				player = new createjs.Shape();
 				player.graphics.beginFill("red").drawCircle(0,0,10);
-				moveTo(player, 34, 0);
+				//moveTo(player, 34, 0);
+                player.x = 34*tileSize + tileSize/2;
+                player.y = tileSize/2;
 				player.Zone = 19;
 				stage.addChild(player);
 				stage.update();
-			}
+			};
 
-			function moveTo(object, x, y) {
+            $scope.moveTo = function moveTo(object, x, y) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
+            };
 
-                //TODO: add socket
-                socket.emit('stage:move',object);
-            }
-
-			function canMoveTo(e) {
-				// debugger;
+			$scope.canMoveTo = function canMoveTo(e) {
+				 //debugger;
 				var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
+                //console.log(isNeighboor);
 				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
-					moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+                    $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
 					player.Zone = e.currentTarget.Zone;
+
+                    var data = {player: {x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                    //TODO: add socket
+                    socket.emit('game:stage:player:move', data);
 				} else {
 					console.log("Vous ne passerez pas!!");
 				}
-			}
+			};
 
 			function fillNeighboors() {
 				var element;

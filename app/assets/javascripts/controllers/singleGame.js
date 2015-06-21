@@ -36,6 +36,12 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     /* == Movements = */
 
+    socket.on('game:player:move', function (data) {
+        console.log("User moove to ...");
+        console.log($scope);
+
+    });
+
     /* == drag map == */
     jQuery("#map").dragScroll({});
 });
