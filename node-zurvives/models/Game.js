@@ -20,14 +20,14 @@ var Game = Class.extend({
     addPlayer: function(player) {
         this.playerList.push(player);
     },
-    getPlayerFromList: function(socketId) {
-        return _.where(this.playerList, {id: socketId})[0];
+    getPlayerFromList: function(email) {
+        return _.where(this.playerList, {email: email})[0];
     },
     getPlayerList: function(){
        return this.playerList;
     },
     removePlayer: function(player) {
-        this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {id: player.id}));
+        this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {email: player.email}));
         return this.playerList;
     }
 });

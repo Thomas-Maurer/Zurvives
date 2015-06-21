@@ -9,7 +9,7 @@ exports.initGame = function (io, socket) {
     /* == Function de retour de socket == */
     function createGame(data) {
         var name = data.name;
-        var owner = socket.id;
+        var owner = data.email;
         var maxPlayer = data.maxPlayer;
         if (isGameExist(name).length > 0) {
             socket.emit('game:exist');
