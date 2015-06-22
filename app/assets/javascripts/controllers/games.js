@@ -9,6 +9,10 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
         $scope.characterService.lists = data.characters;
     })
 
+    $scope.setCharacter = function(id) {
+        $scope.character = _.findWhere(characterService.lists, {id: id});
+    }
+
 
     $scope.createGame = function () {
         if ($scope.gameName.length > 3) {

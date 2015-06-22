@@ -10,7 +10,7 @@
                 <option value="4">4 players</option>
                 <option value="5">5 players</option>
             </select>
-            <select  ng-model="character" ng-options="value.id as value.name for value in characterService.lists" required>
+            <select ng-change="setCharacter(characterSelected)"  ng-model="characterSelected" ng-options="value.id as value.name for value in characterService.lists" required>
                 <option value=''>- Please Choose -</option>
             </select>
             <button ng-disabled="gameForm.$invalid" class="button" ng-click='createGame()'>Create game</button>
