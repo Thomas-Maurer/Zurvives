@@ -55,20 +55,28 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         $location.path('/games');
     });
 
+    socket.on('game:changeturn', function (nextplayer) {
+        $scope.currentGame.turnof = nextplayer;
+    });
+
     $scope.$on('$stateChangeStart', function() {
         socket.emit('game:leave', {slug: $scope.slug, user: $scope.user});
         socket.removeAllListeners();
     });
 
+    $scope.checkIfPlayerCanDoAction = function () {
+        console.log($scope.currentGame.turnof);
+        return $scope.currentGame.turnof === $scope.user.email;
+    };
     /* == Movements = */
 
     socket.on('game:player:move', function (data) {
         console.log("User moove to ...");
         if (typeof ($scope.moveToBroadcast) === 'function') {
-            //debugger;
             var playerOnMotion =_.where($scope.listplayer, data.player.name)[0];
             $scope.moveToBroadcast(playerOnMotion, data.player.x, data.player.y);
         }
+
 
     });
 

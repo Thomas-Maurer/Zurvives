@@ -129,19 +129,28 @@ zurvives.directive('board', function($http, boardData, socket) {
             };
 
 			$scope.canMoveTo = function canMoveTo(e) {
-				 //debugger;
-				var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
-                //console.log(isNeighboor);
-				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
-                    $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-					player.Zone = e.currentTarget.Zone;
+                //debugger;
+                if ($scope.checkIfPlayerCanDoAction()) {
+                    var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
+                    console.log(indexOfCurrentPlayer);
+                    socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug});
 
-                    var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
-                    //TODO: add socket
-                    socket.emit('game:stage:player:move', data);
-				} else {
-					console.log("Vous ne passerez pas!!");
-				}
+                    var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
+                    //console.log(isNeighboor);
+                    if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                        $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+                        player.Zone = e.currentTarget.Zone;
+
+                        var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                        //TODO: add socket
+                        socket.emit('game:stage:player:move', data);
+                    } else {
+                        console.log("Vous ne passerez pas!!");
+                    }
+                }else {
+                    console.log('cannot move not your turn');
+                }
+
 			};
 
 			function fillNeighboors() {

@@ -1,5 +1,5 @@
 zurvives.factory('socket', function ($rootScope) {
-
+    console.log(window.location.hostname);
     var socket = io.connect("http://"+window.location.hostname+":8000");
     return {
         on: function (eventName, callback) {
