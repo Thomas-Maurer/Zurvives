@@ -1,8 +1,18 @@
-zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket) {
+zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket, characterService) {
     socket.removeAllListeners();
     $scope.gameName = "";
     $scope.players = [];
     $scope.listGame = [];
+    $scope.characterService = characterService;
+
+    $scope.characterService.all().then(function(data){
+        $scope.characterService.lists = data.characters;
+    })
+
+    $scope.setCharacter = function(id) {
+        $scope.character = _.findWhere(characterService.lists, {id: id});
+    }
+
 
     $scope.createGame = function () {
         if ($scope.gameName.length > 3) {
@@ -12,6 +22,7 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
             $scope.error = "Le nom de la partie doit avoir plus de 3 lettres";
         }
     };
+
 
     socket.emit('games:get');
 
