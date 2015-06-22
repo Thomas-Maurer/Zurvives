@@ -2,7 +2,8 @@ zurvives.directive('board', function($http, boardData, socket) {
 	var directive = {
         link: link,
         scope: true,
-        restrict: 'AEC'
+        restrict: 'AEC',
+        controller: 'singleGameController'
     };
     return directive;
 	
@@ -92,19 +93,26 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.addChild(container);
 				stage.update();
                 $scope.stage = stage;
-				$scope.initPlayer();
+                $scope.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+				//$scope.initPlayer($scope.color);
 				fillNeighboors();
+
+                //Emit event when map fully loaded
+                socket.emit('map:loaded');
 			}
 
 			var player;
 
-            $scope.initPlayer = function initPlayer() {
+            $scope.initPlayer = function initPlayer(color, username) {
 				player = new createjs.Shape();
-				player.graphics.beginFill("red").drawCircle(0,0,10);
+				player.graphics.beginFill(color).drawCircle(0,0,10);
 				//moveTo(player, 34, 0);
                 player.x = 34*tileSize + tileSize/2;
                 player.y = tileSize/2;
 				player.Zone = 19;
+                player.name = username;
+                //Add player to scope
+                $scope.listplayer.push(player);
 				stage.addChild(player);
 				stage.update();
 			};
@@ -113,22 +121,36 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
+                $scope.alreadyMove = true;
+            };
+            $scope.moveToBroadcast = function moveTo(object, x, y) {
+                object.x= x;
+                object.y =y;
+                stage.update();
             };
 
 			$scope.canMoveTo = function canMoveTo(e) {
-				 //debugger;
-				var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
-                //console.log(isNeighboor);
-				if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
-                    $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-					player.Zone = e.currentTarget.Zone;
+                //debugger;
+                if ($scope.checkIfPlayerTurn() && $scope.canPerformAction() && !$scope.alreadyMove) {
 
-                    var data = {player: {x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
-                    //TODO: add socket
-                    socket.emit('game:stage:player:move', data);
-				} else {
-					console.log("Vous ne passerez pas!!");
-				}
+                    var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
+                    var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
+
+                    if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                        $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+                        player.Zone = e.currentTarget.Zone;
+
+                        var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+
+                        socket.emit('game:stage:player:move', data);
+                        socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
+                    } else {
+                        console.log("Vous ne passerez pas!!");
+                    }
+                }else {
+                    console.log('cannot move not your turn');
+                }
+
 			};
 
 			function fillNeighboors() {

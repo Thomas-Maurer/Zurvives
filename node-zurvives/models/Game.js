@@ -15,6 +15,7 @@ var Game = Class.extend({
         this.slug = name.replace(/ /g,"-");
         this.owner = owner;
         this.maxPlayer = maxPlayer;
+        this.turnof = owner;
         this.playerList = [];
     },
     addPlayer: function(player) {
@@ -29,6 +30,10 @@ var Game = Class.extend({
     removePlayer: function(email) {
         this.playerList = _.without(this.playerList, _.findWhere(this.playerList, {email: email}));
         return this.playerList;
+    },
+    turnOfPlayer: function(nextPlayer) {
+        this.turnof = nextPlayer;
+
     }
 });
 module.exports = Game;

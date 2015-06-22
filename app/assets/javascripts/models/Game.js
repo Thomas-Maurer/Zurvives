@@ -2,7 +2,7 @@ var Game = Class.extend({
 
     init: function(players){
         players = typeof players !== 'undefined' ? players : [];
-        this.players = players
+        this.players = players;
         this.nbPlayer = this.players.length;
     },
 
@@ -15,5 +15,5 @@ var Game = Class.extend({
     }
 });
 
-var test = new Game();
-test.randomTurn();
+//var test = new Game();
+//test.randomTurn();
