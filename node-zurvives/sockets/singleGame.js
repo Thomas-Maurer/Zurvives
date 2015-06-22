@@ -9,6 +9,7 @@ exports.initGame = function (io, socket) {
     socket.on('deconnection', leaveGame);
     socket.on('game:get', getGame);
     socket.on('game:stage:player:move', movePlayerOnStage);
+    socket.on('map:loaded', mapLoaded);
 
     function joinGame(data) {
         socket.join(data.slug ,function(){
@@ -26,7 +27,9 @@ exports.initGame = function (io, socket) {
             // Emit
             sendPlayersList(broadcast,currentGame);
             sendPlayersList(socket,currentGame);
+            socket.broadcast.emit('player:join', player);
             socket.broadcast.emit('listGame:refresh', listGames);
+
         });
     }
 
@@ -58,15 +61,15 @@ exports.initGame = function (io, socket) {
         }
     }
 
-    function movePlayerOnStage (data) {
-        var broadcast = socket.broadcast.to(data.slug);
-        console.log("Player moove on stage server side");
+    function mapLoaded() {
+        socket.emit('map:loaded');
+    }
 
+    function movePlayerOnStage (data) {
+        debugger;
+        var broadcast = socket.broadcast.to(data.slug);
         //Send to all something for update stage
         broadcast.emit('game:player:move', data);
-
-
-        console.log(data);
     }
 
     /* == Getters and setters == */
