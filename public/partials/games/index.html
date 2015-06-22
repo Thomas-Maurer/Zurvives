@@ -1,7 +1,7 @@
 <div id="games" class="span12 tablet12 phone12">
     <p style="color:red">{{ error }}</p>
     <div class="form span10 tablet12 phone12">
-        <input placeholder="Games's name" type="text" ng-model="gameName"/>
+        <input placeholder="Games's name" type="text" ng-model="gameName" required/>
         <form name="gameForm">
             <select>
                 <option value="1">1 player</option>
@@ -11,7 +11,7 @@
                 <option value="5">5 players</option>
             </select>
             <select ng-change="setCharacter(characterSelected)"  ng-model="characterSelected" ng-options="value.id as value.name for value in characterService.lists" required>
-                <option value=''>- Please Choose -</option>
+                <option value=''>- Please Choose a character -</option>
             </select>
             <button ng-disabled="gameForm.$invalid" class="button" ng-click='createGame()'>Create game</button>
         </form>
