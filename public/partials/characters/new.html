@@ -1,0 +1,8 @@
+<form>
+    <input type="text" name="name">
+    <div class="skills">
+        <ul ng-repeat="skill in skillService.lists | orderBy: 'name'">
+            <li><a href="#">{{skill.name}}</a></li>
+        </ul>
+    </div>
+</form>

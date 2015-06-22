@@ -1,5 +1,6 @@
 class Character < ActiveRecord::Base
   after_create :create_level
+  before_destroy :destroy_level
 
   belongs_to :user
   has_one :level
@@ -16,5 +17,9 @@ class Character < ActiveRecord::Base
 
   def create_level
     self.level = Level.create
+  end
+
+  def destroy_level
+    Level.find(self.level.id).destroy
   end
 end

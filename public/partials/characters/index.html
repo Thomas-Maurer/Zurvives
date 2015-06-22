@@ -1,0 +1,23 @@
+<form name="characterForm">
+    <input type="text" name="name" placeholder="Name" ng-model="character.name" required>
+    <button ng-disabled="characterForm.$invalid" ng-click="createCharacter(characterForm, character)">Create Character</button>
+</form>
+<div id="games" class="span12 tablet12 phone12">
+    <p style="color:red">{{ error }}</p>
+    <div class="gamelist span10 tablet12 phone12">
+     <span class="gamelisttitle span12">
+        <p class="span4 tablet4 phone4">Numéro</p>
+        <p class="span4 tablet4 phone4">Name</p>
+        <p class="span4 tablet4 phone4">Action</p>
+    </span>
+        <div class="span12" ng-repeat="character in characterService.lists">
+            <p class="span4 tablet4 phone4">
+                <a ui-sref="profil.editCharacter({id: character.id})">{{ $index +1 }}</a>
+            </p>
+            <p class="span4 tablet4 phone4">
+                <a ui-sref="profil.editCharacter({id: character.id})">{{ character.name }}</a>
+            </p>
+           <p class="span4 tablet4 phone4"> <a ng-click='removeCharacter(character.id, $index)'>delete</a></p>
+        </div>
+    </div>
+</div>

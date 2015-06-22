@@ -22,7 +22,6 @@ function AngularData($q, $http) {
 
     function fetch(resource, method, data, id) {
         var url = '/api/'+resource;
-
         if(id) {
             url = '/api/'+resource+'/'+id;
         }

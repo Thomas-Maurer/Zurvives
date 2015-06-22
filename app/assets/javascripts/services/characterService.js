@@ -20,38 +20,26 @@ function characterService(AngularData, $q, $http) {
 
     function all() {
         var that = this;
-        AngularData.all(this.resource).then(function(data){
-            _.each(data.characters, function(character){
-                that.lists.push(new Character(character, that));
-            })
-            return data;
-        });
+        return AngularData.all(this.resource);
     }
 
     function show(id) {
         var that = this;
-        AngularData.show(this.resource, id).then(function(character){
-            that.model = new Character(character);
-            return character;
-        });
+        return AngularData.show(this.resource, id);
     }
     function create(data) {
         var datas = {};
         datas.characters = data;
-        AngularData.create(this.resource, datas);
+        return AngularData.create(this.resource, datas);
     }
 
     function update(data, id) {
         var datas = {};
         datas.characters = data;
-        AngularData.update(this.resource, datas, id).then(function(character){
-            return character;
-        });
+        return AngularData.update(this.resource, datas, id);
     }
 
     function remove(id) {
-        AngularData.remove(this.resource, id).then(function(data){
-            console.log(data)
-        });
+        return AngularData.remove(this.resource, id);
     }
 }

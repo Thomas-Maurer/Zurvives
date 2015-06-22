@@ -26,7 +26,7 @@ class Api::CharactersController < ApplicationController
   end
 
   def destroy
-    Character.find(params[:id]).delete
+    Character.find(params[:id]).destroy
     render json: {message: 'destroy'}
   end
 

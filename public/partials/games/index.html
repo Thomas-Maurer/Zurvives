@@ -2,14 +2,19 @@
     <p style="color:red">{{ error }}</p>
     <div class="form span10 tablet12 phone12">
         <input placeholder="Games's name" type="text" ng-model="gameName"/>
-        <select>
-            <option value="1">1 player</option>
-            <option value="2">2 players</option>
-            <option value="3">3 players</option>
-            <option value="4">4 players</option>
-            <option value="5">5 players</option>
-        </select>
-        <button class="button" ng-click='createGame()'>Create game</button>
+        <form name="gameForm">
+            <select>
+                <option value="1">1 player</option>
+                <option value="2">2 players</option>
+                <option value="3">3 players</option>
+                <option value="4">4 players</option>
+                <option value="5">5 players</option>
+            </select>
+            <select  ng-model="character" ng-options="value.id as value.name for value in characterService.lists" required>
+                <option value=''>- Please Choose -</option>
+            </select>
+            <button ng-disabled="gameForm.$invalid" class="button" ng-click='createGame()'>Create game</button>
+        </form>
     </div>
     <div class="gamelist span10 tablet12 phone12">
      <span class="gamelisttitle span12">
