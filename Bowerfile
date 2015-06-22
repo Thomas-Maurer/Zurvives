@@ -7,7 +7,7 @@ group :vendor, :assets_path => "assets"  do
     asset 'ng-token-auth'
     asset 'susy'
     asset 'breakpoint-sass'
-    asset 'underscore'
+    asset 'underscore', '1.8.3'
     asset 'underscore.inflection'
     asset 'angular-resource'
 end

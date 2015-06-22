@@ -2,7 +2,8 @@ zurvives.directive('board', function($http, boardData, socket) {
 	var directive = {
         link: link,
         scope: true,
-        restrict: 'AEC'
+        restrict: 'AEC',
+        controller: 'singleGameController'
     };
     return directive;
 	
@@ -92,19 +93,26 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.addChild(container);
 				stage.update();
                 $scope.stage = stage;
-				$scope.initPlayer();
+                $scope.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+				//$scope.initPlayer($scope.color);
 				fillNeighboors();
+
+                //Emit event when map fully loaded
+                socket.emit('map:loaded');
 			}
 
 			var player;
 
-            $scope.initPlayer = function initPlayer() {
+            $scope.initPlayer = function initPlayer(color, username) {
 				player = new createjs.Shape();
-				player.graphics.beginFill("red").drawCircle(0,0,10);
+				player.graphics.beginFill(color).drawCircle(0,0,10);
 				//moveTo(player, 34, 0);
                 player.x = 34*tileSize + tileSize/2;
                 player.y = tileSize/2;
 				player.Zone = 19;
+                player.name = username;
+                //Add player to scope
+                $scope.listplayer.push(player);
 				stage.addChild(player);
 				stage.update();
 			};
@@ -113,6 +121,11 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
+            };
+            $scope.moveToBroadcast = function moveTo(object, x, y) {
+                object.x= x;
+                object.y =y;
+                stage.update();
             };
 
 			$scope.canMoveTo = function canMoveTo(e) {
@@ -123,7 +136,7 @@ zurvives.directive('board', function($http, boardData, socket) {
                     $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
 					player.Zone = e.currentTarget.Zone;
 
-                    var data = {player: {x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                    var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
                     //TODO: add socket
                     socket.emit('game:stage:player:move', data);
 				} else {
