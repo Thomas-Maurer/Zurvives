@@ -11,6 +11,7 @@ exports.initGame = function (io, socket) {
     socket.on('game:stage:player:move', movePlayerOnStage);
     socket.on('map:loaded', mapLoaded);
     socket.on('game:changeTurn', changeTurn);
+    socket.on('game:player:endturn', changeTurn);
 
     function joinGame(data) {
         socket.join(data.slug ,function(){
@@ -69,16 +70,21 @@ exports.initGame = function (io, socket) {
     function changeTurn(data) {
         var currentGame = getCurrentGame(data.slug);
         var broadcast = socket.broadcast.to(data.slug);
-        if (typeof (currentGame.getPlayerList) === 'function') {
-            if (data.currentplayer + 1 < currentGame.getPlayerList().length ) {
-                currentGame.turnOfPlayer(currentGame.getPlayerList()[data.currentplayer + 1].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
-                socket.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
 
-            } else {
-                currentGame.turnOfPlayer(currentGame.getPlayerList()[0].email);
-                socket.emit('game:changeturn', currentGame.getPlayerList()[0].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[0].email);
+        console.log(data);
+
+        if (typeof (currentGame.getPlayerList) === 'function') {
+            if (data.actionsLeft === 0 ){
+                if (data.currentplayer + 1 < currentGame.getPlayerList().length ) {
+                    currentGame.turnOfPlayer(currentGame.getPlayerList()[data.currentplayer + 1].email);
+                    broadcast.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
+                    socket.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
+
+                } else {
+                    currentGame.turnOfPlayer(currentGame.getPlayerList()[0].email);
+                    socket.emit('game:changeturn', currentGame.getPlayerList()[0].email);
+                    broadcast.emit('game:changeturn', currentGame.getPlayerList()[0].email);
+                }
             }
         }
 
