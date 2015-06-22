@@ -11,12 +11,7 @@
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
   <%= javascript_include_tag 'application','app' %>
-
-  <% if Rails.env.development? %>
-     <script src="http://localhost:8000/socket.io/socket.io.js"></script>
-  <% else %>
-        <script src="http://10.40.74.44:8000/socket.io/socket.io.js"></script>
-  <% end %>
+  <script src="http://<%=request.host%>:8000/socket.io/socket.io.js"></script>
 
   <%= csrf_meta_tags %>
 </head>
