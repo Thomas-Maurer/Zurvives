@@ -13,6 +13,9 @@ var Character = Class.extend({
     },
     getLaide: function() {
 
+    },
+    updateInventory: function(equipment) {
+        this.equipment.push(equipment);
     }
 });
 module.exports = Character;

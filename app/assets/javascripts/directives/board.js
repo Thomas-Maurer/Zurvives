@@ -131,27 +131,34 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 			$scope.canMoveTo = function canMoveTo(e) {
                 //debugger;
-                if ($scope.checkIfPlayerTurn() && $scope.canPerformAction() && !$scope.alreadyMove) {
+                if ($scope.checkIfPlayerTurn() && $scope.canPerformAction()) {
+                    if (!$scope.alreadyMove){
+                        var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
+                        var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 
-                    var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
-                    var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
+                        if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                            $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+                            player.Zone = e.currentTarget.Zone;
 
-                    if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
-                        $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-                        player.Zone = e.currentTarget.Zone;
+                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
 
-                        var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                            socket.emit('game:stage:player:move', data);
+                            socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
+                        } else {
+                            console.log("Vous ne passerez pas!!");
 
-                        socket.emit('game:stage:player:move', data);
-                        socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
-                    } else {
-                        console.log("Vous ne passerez pas!!");
+                        }
+                    }else {
+                        console.log("Loot Time");
+                        $scope.lootIfYouCan();
                     }
                 }else {
                     console.log('cannot move not your turn');
                 }
 
 			};
+
+
 
 			function fillNeighboors() {
 				var element;

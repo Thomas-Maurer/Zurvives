@@ -11,10 +11,12 @@ exports.initGame = function (io, socket) {
         var name = data.name;
         var owner = data.email;
         var maxPlayer = data.maxPlayer;
+        var listChar = [];
+        listChar.push(data.character);
         if (isGameExist(name).length > 0) {
             socket.emit('game:exist');
         } else {
-            var game = new Game(name, owner, maxPlayer);
+            var game = new Game(name, owner, maxPlayer, listChar);
             listGames.push(game);
             socket.emit('listGame:redirect', game);
         }

@@ -15,4 +15,9 @@ class EquipmentController < ApplicationController
   def weapon
     render json: {weapons: Weapon.find(params[:id])}
   end
+
+  def random_equip
+    render json: {equipments: Equipment.offset(rand(Equipment.count)).first}
+
+  end
 end

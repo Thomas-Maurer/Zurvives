@@ -1,9 +1,11 @@
-zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket) {
+zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService) {
     $scope.slug = $stateParams.slug;
     $scope.players = [];
     $scope.listplayer = [];
     $scope.actions = 3;
     $scope.alreadyMove = false;
+    $scope.alreadyLoot = false;
+    $scope.characterService = characterService;
 
     socket.emit('game:get', $scope.slug);
     socket.on('game:get:return', function (data) {
@@ -59,6 +61,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         $scope.currentGame.turnof = nextplayer;
         $scope.actions = 3;
         $scope.alreadyMove = false;
+        $scope.alreadyLoot = false;
     });
 
     $scope.$on('$stateChangeStart', function() {
@@ -83,6 +86,13 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         console.log(indexOfCurrentPlayer);
     };
 
+    socket.on('game:player:loot', function (data) {
+        var charToUpdate = _.findWhere($scope.currentGame.listChar, data.user);
+        charToUpdate.equipments.push(data.loot);
+        console.log('Char ' + charToUpdate.name + ' has looted '+ data.loot.name);
+
+    });
+
     /* == Movements = */
 
     socket.on('game:player:move', function (data) {
@@ -93,6 +103,32 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         }
 
 
+    });
+
+
+    /* == Loot = */
+
+    $scope.lootIfYouCan = function () {
+        if (!$scope.alreadyLoot) {
+            //TODO Call api angular to get a random item
+            $http.get('/api/equipment/random_equip').
+                success(function(data, status, headers, config) {
+                    var currentChar = _.findWhere($scope.currentGame.listChar, $scope.user.email);
+                    currentChar.equipments.push(data.equipments);
+                    socket.emit('player:loot:addinvotory', {user: $scope.user.email, loot: data.equipments, slug: $scope.slug} );
+                }).
+                error(function(data, status, headers, config) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                });
+        }else {
+            console.log('You have already loot dont be so greedy !');
+
+        }
+    };
+
+    socket.on('game:player:loot', function (data) {
+        console.log('Player loot');
     });
 
     /* == drag map == */

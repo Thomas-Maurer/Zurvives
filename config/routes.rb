@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   get 'api/equipments/:id' => 'equipment#equipment'
   get 'api/weapons/' => 'equipment#weapons'
   get 'api/weapons/:id' => 'equipment#weapon'
+  get 'api/equipment/random_equip' => 'equipment#random_equip'
 
   # Will redirect all others path to angular config
   get '*path' => 'page#index'

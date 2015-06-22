@@ -23,7 +23,7 @@
         <p class="span4 tablet4 phone4">Connected</p>
     </span>
         {{ gameError }}
-        <a class="span12" ng-repeat="game in listGame" href="/game/{{ game.slug }}">
+        <a class="span12" ng-repeat="game in listGame" href="/game/{{ game.slug }}" ng-click="addChar(game.slug)">
             <p class="span4 tablet4 phone4">{{ game.name }}</p>
             <p class="span4 tablet4 phone4">{{ game.owner }}</p>
             <p class="span4 tablet4 phone4">{{ game.playerListCount }} / {{ game.maxPlayer }}</p>

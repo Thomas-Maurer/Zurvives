@@ -12,6 +12,8 @@ exports.initGame = function (io, socket) {
     socket.on('map:loaded', mapLoaded);
     socket.on('game:changeTurn', changeTurn);
     socket.on('game:player:endturn', changeTurn);
+    socket.on('game:add:char', addcharTogame);
+    socket.on('player:loot:addinvotory', notifyAllLoot);
 
     function joinGame(data) {
         socket.join(data.slug ,function(){
@@ -63,6 +65,16 @@ exports.initGame = function (io, socket) {
         }
     }
 
+    function addcharTogame (data) {
+        var currentGame = getCurrentGame(data.slug);
+        currentGame.addChar(data.character);
+    }
+
+    function notifyAllLoot (data) {
+        var broadcast = socket.broadcast.to(data.slug);
+        broadcast.emit('game:player:loot', data);
+    }
+
     function mapLoaded() {
         socket.emit('map:loaded');
     }
@@ -98,7 +110,6 @@ exports.initGame = function (io, socket) {
         //Send to all something for update stage
         broadcast.emit('game:player:move', data);
     }
-
     /* == Getters and setters == */
 
     function getGame(slug) {

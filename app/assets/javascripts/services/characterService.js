@@ -14,7 +14,7 @@ function characterService(AngularData, $q, $http) {
         remove: remove,
         resource: "characters",
         lists: []
-    }
+    };
 
     return service;
 
