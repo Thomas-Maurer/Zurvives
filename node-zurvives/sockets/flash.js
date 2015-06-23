@@ -3,7 +3,6 @@ var _ = require('underscore');
 exports.initFlash = function (io, socket) {
 
     socket.on('flash:message:send',function(data){
-        console.log("emit");
         socket.emit('flash:message',data);
     });
 

@@ -11,7 +11,10 @@ zurvives.directive('flash', function(socket, $rootScope) {
             socket.removeAllListeners();
         });
         socket.on('flash:message', function(data){
-            alert(data);
+            $scope.flashMessage = data.message;
+            $("#flash-message").fadeIn(300);
+            $("#flash-message").delay(1000).fadeOut(300);
+
         })
     }
 });
