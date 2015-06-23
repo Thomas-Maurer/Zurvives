@@ -25,6 +25,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         if (typeof ($scope.initPlayer) === 'function') {
             if ($scope.players.length === 1 ) {
                 $scope.initPlayer($scope.color, $scope.user.email);
+                $scope.initZombie();
             }else {
                 _.each($scope.players, function (player) {
                     $scope.initPlayer($scope.color, player.email);
