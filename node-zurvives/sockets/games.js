@@ -14,7 +14,7 @@ exports.initGame = function (io, socket) {
         var listChar = [];
         listChar.push(data.character);
         if (isGameExist(name).length > 0) {
-            socket.emit('game:exist');
+            socket.emit('flash:message','La partie existe déjà');
         } else {
             var game = new Game(name, owner, maxPlayer, listChar);
             listGames.push(game);

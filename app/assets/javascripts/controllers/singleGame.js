@@ -1,4 +1,5 @@
-zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService, equipmentService) {
+zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService, equipmentService,flashService) {
+
     $scope.slug = $stateParams.slug;
     $scope.players = [];
     $scope.listplayer = [];
@@ -11,10 +12,10 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
             $location.path('/games');
-            socket.emit('game:not_found');
+            flashService.emit("La partie n'existe pas");
         } else if(data.playerList.length >= data.maxPlayer){
             $location.path('/games');
-            socket.emit('game:full');
+            flashService.emit('La partie est pleine')
         } else {
             $scope.currentGame = data;
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
@@ -38,6 +39,9 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('player:leave', function (user) {
+        socket.emit('game:players:get',$scope.slug);
+        flashService.emit("Un joueur à quitté la partie.")
+
         if (typeof ($scope.deletePlayer) === 'function') {
             console.log("user has leaves : " + user);
             $scope.deletePlayer(user);
@@ -46,7 +50,6 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('player:join', function (user) {
-        //
         if (typeof ($scope.initPlayer) === 'function' && user !== null) {
             console.log("user has join : " + user);
             if ( _.where($scope.listplayer, user.email) ){
@@ -58,6 +61,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:owner:leave', function () {
         $location.path('/games');
+        flashService.emit("Le propriétaire à quitté la partie.")
     });
 
     socket.on('game:changeturn', function (nextplayer) {
@@ -107,7 +111,6 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
 
     });
-
 
     /* == Loot = */
 

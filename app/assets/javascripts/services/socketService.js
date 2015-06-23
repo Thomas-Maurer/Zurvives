@@ -1,5 +1,4 @@
 zurvives.factory('socket', function ($rootScope) {
-    console.log(window.location.hostname);
     var socket = io.connect("http://"+window.location.hostname+":8000");
     return {
         on: function (eventName, callback) {
@@ -20,8 +19,14 @@ zurvives.factory('socket', function ($rootScope) {
                 });
             })
         },
-        removeAllListeners: function() {
-            socket.removeAllListeners();
+
+        removeAllListeners: function (eventName, callback) {
+            socket.removeAllListeners(eventName, function() {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    callback.apply(socket, args);
+                });
+            });
         }
     };
 });
