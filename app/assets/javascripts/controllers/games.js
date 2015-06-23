@@ -1,6 +1,5 @@
 zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket, characterService,flashService) {
 
-    socket.removeAllListeners();
     $scope.gameName = "";
     $scope.players = [];
     $scope.listGame = [];

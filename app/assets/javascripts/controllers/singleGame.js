@@ -1,5 +1,4 @@
 zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService, equipmentService,flashService) {
-
     $scope.slug = $stateParams.slug;
     $scope.players = [];
     $scope.listplayer = [];
@@ -11,11 +10,13 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     socket.emit('game:get', $scope.slug);
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
-            $location.path('/games');
-            flashService.emit("La partie n'existe pas");
+            $state.go("games").then(function(){
+                flashService.emit("La partie n'existe pas");
+            })
         } else if(data.playerList.length >= data.maxPlayer){
-            $location.path('/games');
-            flashService.emit('La partie est pleine')
+            $state.go("games").then(function(){
+                flashService.emit('La partie est pleine')
+            })
         } else {
             $scope.currentGame = data;
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
@@ -60,8 +61,9 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('game:owner:leave', function () {
-        $location.path('/games');
-        flashService.emit("Le propriétaire à quitté la partie.")
+        $state.go("games").then(function(){
+            flashService.emit("Le propriétaire à quitté la partie.")
+        })
     });
 
     socket.on('game:changeturn', function (nextplayer) {
