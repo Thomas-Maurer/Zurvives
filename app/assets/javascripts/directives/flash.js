@@ -8,7 +8,7 @@ zurvives.directive('flash', function(socket) {
 
     function link($scope, element, attrs) {
         socket.on('flash:message', function(data){
-            alert('here')
+            alert(data);
         })
     }
 });

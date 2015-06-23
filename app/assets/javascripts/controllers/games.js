@@ -1,4 +1,4 @@
-zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket) {
+zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket,flashService) {
     socket.removeAllListeners();
     $scope.gameName = "";
     $scope.players = [];
@@ -9,7 +9,7 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
             var maxPlayer = $('select').val();
             socket.emit('games:create', {name: $scope.gameName,email: $scope.user.email, maxPlayer: maxPlayer});
         } else {
-            socket.emit('flash:message:send',{message: 'Le nom de la partie doit avoir plus de 3 lettres'});
+            flashService.emit('Le nom de la partie doit avoir plus de 3 lettres');
         }
     };
 

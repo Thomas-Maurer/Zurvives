@@ -12,7 +12,7 @@ exports.initGame = function (io, socket) {
         var owner = data.email;
         var maxPlayer = data.maxPlayer;
         if (isGameExist(name).length > 0) {
-            socket.emit('flash:message',{message: 'La partie existe déjà'});
+            socket.emit('flash:message','La partie existe déjà');
         } else {
             var game = new Game(name, owner, maxPlayer);
             listGames.push(game);
@@ -22,7 +22,6 @@ exports.initGame = function (io, socket) {
 
     function getGames() {
         socket.emit('listGame:refresh', listGames);
-        socket.emit('test');
     }
 
     function isGameExist(name) {
