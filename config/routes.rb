@@ -9,8 +9,11 @@ Rails.application.routes.draw do
     delete 'remove_skill/:character/:skill' => 'character_skills#remove_skill'
 
     #character_equipement
-    post 'add_skill/:character/:equipement'   => 'character_equipements#add_equipement'
-    delete 'add_skill/:character/:equipement' => 'character_equipements#remove_equipement'
+    post 'add_equipment/:character/:equipment'   => 'character_equipments#add_equipement'
+    delete 'remove_equipment/:character/:equipment' => 'character_equipments#remove_equipement'
+
+    post 'add_weapon/:character/:equipment'   => 'character_equipments#remove_weapon'
+    delete 'remove_weapon/:character/:equipment' => 'character_equipments#remove_weapon'
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

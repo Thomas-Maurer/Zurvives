@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150618072022) do
+ActiveRecord::Schema.define(version: 20150623064210) do
 
   create_table "character_equipments", force: :cascade do |t|
     t.integer "character_id", limit: 4
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(version: 20150618072022) do
 
   add_index "character_skills", ["character_id"], name: "index_character_skills_on_character_id", using: :btree
   add_index "character_skills", ["skill_id"], name: "index_character_skills_on_skill_id", using: :btree
+
+  create_table "character_weapons", force: :cascade do |t|
+    t.integer "character_id", limit: 4
+    t.integer "weapon_id",    limit: 4
+  end
+
+  add_index "character_weapons", ["character_id"], name: "index_character_weapons_on_character_id", using: :btree
+  add_index "character_weapons", ["weapon_id"], name: "index_character_weapons_on_weapon_id", using: :btree
 
   create_table "characters", force: :cascade do |t|
     t.string   "name",       limit: 255

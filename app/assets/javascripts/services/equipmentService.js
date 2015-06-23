@@ -11,6 +11,8 @@ function equipmentService(AngularData) {
         show: show,
         create: create,
         remove: remove,
+        addWeapon: addWeapon,
+        removeWeapon: removeWeapon,
         resource: "equipments",
         lists: []
     }
@@ -19,18 +21,12 @@ function equipmentService(AngularData) {
 
     function all() {
         var that = this;
-        AngularData.all(this.resource).then(function(data){
-            _.each(data.equipments, function(equipment){
-                that.lists.push(new Equipment(equipment, this));
-            })
-        });
+        return AngularData.all(this.resource);
     }
 
     function show(id) {
         var that = this;
-        AngularData.show(this.resource, id).then(function(equipment){
-            that.model = new Equipment(equipment);
-        });
+        return AngularData.show(this.resource, id)
     }
 
     function create(id, characterId) {
@@ -49,6 +45,32 @@ function equipmentService(AngularData) {
     function remove(id, characterId) {
         var deferred = $q.defer();
         $http({method: "DELETE", url: "/api/remove_equipment/"+characterId+"/"+id}).
+            success(function(data, status, headers, config){
+                deferred.resolve(data)
+            }).
+            error(function(data, status, headers, config){
+                deferred.reject(status)
+            });
+
+        return deferred.promise;
+    }
+
+    function addWeapon(id, characterId) {
+        var deferred = $q.defer();
+        $http({method: "POST", url: "/api/add_weapon/"+characterId+"/"+id}).
+            success(function(data, status, headers, config){
+                deferred.resolve(data)
+            }).
+            error(function(data, status, headers, config){
+                deferred.reject(status)
+            });
+
+        return deferred.promise;
+    }
+
+    function removeWeapon(id, characterId) {
+        var deferred = $q.defer();
+        $http({method: "DELETE", url: "/api/remove_weapon/"+characterId+"/"+id}).
             success(function(data, status, headers, config){
                 deferred.resolve(data)
             }).

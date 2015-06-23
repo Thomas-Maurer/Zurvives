@@ -1,4 +1,4 @@
-class Weapon < ActiveRecord::Base
+class Weapon < Equipment
   acts_as :equipment
 
 end
