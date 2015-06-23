@@ -1,17 +1,14 @@
 zurvives.directive('flash', function(socket) {
-    var flash = {
-        link:message,
+    var directive = {
+        link: link,
         scope: true,
         restrict: 'AEC'
     };
-    return flash;
+    return directive;
 
-    function message($scope,element,attrs) {
-        socket.on('flash:message', function(data) {
-            console.log('here');
-            $scope.flashMessage = data.message;
-
-        });
+    function link($scope, element, attrs) {
+        socket.on('flash:message', function(data){
+            alert('here')
+        })
     }
-
 });
