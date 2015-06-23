@@ -1,4 +1,4 @@
-zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService) {
+zurvives.controller('singleGameController', function ($scope, $location, $state, $http, $stateParams, socket, characterService, equipmentService) {
     $scope.slug = $stateParams.slug;
     $scope.players = [];
     $scope.listplayer = [];
@@ -38,8 +38,11 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('player:leave', function (user) {
-        console.log("user has leaves : " + user);
-        socket.emit('game:players:get',$scope.slug);
+        if (typeof ($scope.deletePlayer) === 'function') {
+            console.log("user has leaves : " + user);
+            $scope.deletePlayer(user);
+            socket.emit('game:players:get', $scope.slug);
+        }
     });
 
     socket.on('player:join', function (user) {
@@ -108,28 +111,33 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     /* == Loot = */
 
-    $scope.lootIfYouCan = function () {
+    $scope.lootIfYouCan = function (ZoneWhereYouWantToLoot, playerZone) {
         if (!$scope.alreadyLoot) {
-            //TODO Call api angular to get a random item
-            $http.get('/api/equipment/random_equip').
-                success(function(data, status, headers, config) {
-                    var currentChar = _.findWhere($scope.currentGame.listChar, $scope.user.email);
-                    currentChar.equipments.push(data.equipments);
-                    socket.emit('player:loot:addinvotory', {user: $scope.user.email, loot: data.equipments, slug: $scope.slug} );
-                }).
-                error(function(data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-                });
+            if (ZoneWhereYouWantToLoot === playerZone){
+                //TODO Call api angular to get a random item
+                $http.get('/api/equipment/random_equip').
+                    success(function(data, status, headers, config) {
+                        var currentChar = _.findWhere($scope.currentGame.listChar, $scope.user.email);
+                        currentChar.equipments.push(data.equipments);
+                        $scope.alreadyLoot = true;
+                        $scope.actions--;
+
+                        equipmentService.create(data.equipments.id, currentChar.id);
+
+                        socket.emit('player:loot:addinvotory', {user: $scope.user.email, loot: data.equipments, slug: $scope.slug} );
+                    }).
+                    error(function(data, status, headers, config) {
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                    });
+            }else {
+                console.log("You are to far to loot Bitch");
+            }
         }else {
             console.log('You have already loot dont be so greedy !');
 
         }
     };
-
-    socket.on('game:player:loot', function (data) {
-        console.log('Player loot');
-    });
 
     /* == drag map == */
     // jQuery("#map").dragScroll({});

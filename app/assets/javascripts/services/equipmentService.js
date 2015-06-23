@@ -4,8 +4,8 @@ angular
     .module('zurvives')
     .factory('equipmentService', equipmentService);
 
-equipmentService.$inject = ["AngularData"]
-function equipmentService(AngularData) {
+equipmentService.$inject = ["AngularData", "$q", "$http"]
+function equipmentService(AngularData, $q, $http) {
     var service = {
         all: all,
         show: show,

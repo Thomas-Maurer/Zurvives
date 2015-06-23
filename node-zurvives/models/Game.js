@@ -38,6 +38,9 @@ var Game = Class.extend({
     },
     addChar: function(char) {
         this.listChar.push(char);
+    },
+    deleteChar: function(char) {
+
     }
 });
 module.exports = Game;

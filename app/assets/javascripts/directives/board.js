@@ -117,6 +117,13 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.update();
 			};
 
+            $scope.deletePlayer = function (useremail) {
+                debugger;
+                var playerToDelete = _.findWhere($scope.listplayer, useremail);
+                stage.removeChild(playerToDelete);
+                stage.update();
+            };
+
             $scope.moveTo = function moveTo(object, x, y) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
@@ -132,7 +139,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 			$scope.canMoveTo = function canMoveTo(e) {
                 //debugger;
                 if ($scope.checkIfPlayerTurn() && $scope.canPerformAction()) {
-                    if (!$scope.alreadyMove){
+                    if (!$scope.alreadyMove && !$scope.alreadyLoot){
                         var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
                         var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 
@@ -150,7 +157,7 @@ zurvives.directive('board', function($http, boardData, socket) {
                         }
                     }else {
                         console.log("Loot Time");
-                        $scope.lootIfYouCan();
+                        $scope.lootIfYouCan(e.currentTarget.Zone, player.Zone);
                     }
                 }else {
                     console.log('cannot move not your turn');
