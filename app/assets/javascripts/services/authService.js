@@ -4,7 +4,7 @@ angular
     .module('zurvives')
     .service('authService', authService);
 
-authService.$inject = ['$auth', '$http', '$state','socket']
+authService.$inject = ['$auth', '$http', '$state','socket'];
 function authService($auth, $http, $state,socket) {
     var that = this;
     that.user = {};

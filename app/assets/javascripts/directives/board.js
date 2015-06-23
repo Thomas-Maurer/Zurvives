@@ -73,6 +73,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 									var results = name.match(/(\d+|\D+)/g);
 									switch(name) {
 										case "Collision":
+										case "SpawnZombie":
 											eval('cellBitmap. ' + results[0] + ' = true');
 											break;
 										default:
@@ -83,10 +84,9 @@ zurvives.directive('board', function($http, boardData, socket) {
 							}
 						});
 
-						// console.log(cellBitmap);
-
 						cellBitmap.addEventListener("click", $scope.canMoveTo);
 						container.addChild(cellBitmap);
+
 					};
 				};
 
@@ -117,10 +117,18 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.update();
 			};
 
+            $scope.deletePlayer = function (useremail) {
+                debugger;
+                var playerToDelete = _.findWhere($scope.listplayer, useremail);
+                stage.removeChild(playerToDelete);
+                stage.update();
+            };
+
             $scope.moveTo = function moveTo(object, x, y) {
 				object.x= x*tileSize + tileSize/2;
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
+                $scope.alreadyMove = true;
             };
             $scope.moveToBroadcast = function moveTo(object, x, y) {
                 object.x= x;
@@ -130,28 +138,34 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 			$scope.canMoveTo = function canMoveTo(e) {
                 //debugger;
-                if ($scope.checkIfPlayerCanDoAction()) {
-                    var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
-                    console.log(indexOfCurrentPlayer);
-                    socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug});
+                if ($scope.checkIfPlayerTurn() && $scope.canPerformAction()) {
+                    if (!$scope.alreadyMove && !$scope.alreadyLoot){
+                        var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
+                        var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 
-                    var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
-                    //console.log(isNeighboor);
-                    if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
-                        $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-                        player.Zone = e.currentTarget.Zone;
+                        if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                            $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
+                            player.Zone = e.currentTarget.Zone;
 
-                        var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
-                        //TODO: add socket
-                        socket.emit('game:stage:player:move', data);
-                    } else {
-                        console.log("Vous ne passerez pas!!");
+                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+
+                            socket.emit('game:stage:player:move', data);
+                            socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
+                        } else {
+                            console.log("Vous ne passerez pas!!");
+
+                        }
+                    }else {
+                        console.log("Loot Time");
+                        $scope.lootIfYouCan(e.currentTarget.Zone, player.Zone);
                     }
                 }else {
                     console.log('cannot move not your turn');
                 }
 
 			};
+
+
 
 			function fillNeighboors() {
 				var element;

@@ -1,15 +1,19 @@
 <div id="games" class="span12 tablet12 phone12">
-    <p style="color:red">{{ error }}</p>
     <div class="form span10 tablet12 phone12">
-        <input placeholder="Games's name" type="text" ng-model="gameName"/>
-        <select>
-            <option value="1">1 player</option>
-            <option value="2">2 players</option>
-            <option value="3">3 players</option>
-            <option value="4">4 players</option>
-            <option value="5">5 players</option>
-        </select>
-        <button class="button" ng-click='createGame()'>Create game</button>
+        <form name="gameForm">
+            <input placeholder="Games's name" type="text" ng-model="gameName" required/>
+            <select>
+                <option value="1">1 player</option>
+                <option value="2">2 players</option>
+                <option value="3">3 players</option>
+                <option value="4">4 players</option>
+                <option value="5">5 players</option>
+            </select>
+            <select ng-change="setCharacter(characterSelected)"  ng-model="characterSelected" ng-options="value.id as value.name for value in characterService.lists" required>
+                <option value=''>- Please Choose a character -</option>
+            </select>
+            <button ng-disabled="gameForm.$invalid" class="button" ng-click='createGame()'>Create game</button>
+        </form>
     </div>
     <div class="gamelist span10 tablet12 phone12">
      <span class="gamelisttitle span12">
@@ -18,7 +22,7 @@
         <p class="span4 tablet4 phone4">Connected</p>
     </span>
         {{ gameError }}
-        <a class="span12" ng-repeat="game in listGame" href="/game/{{ game.slug }}">
+        <a class="span12" ng-repeat="game in listGame" href="/game/{{ game.slug }}" ng-click="addChar(game.slug)">
             <p class="span4 tablet4 phone4">{{ game.name }}</p>
             <p class="span4 tablet4 phone4">{{ game.owner }}</p>
             <p class="span4 tablet4 phone4">{{ game.playerListCount }} / {{ game.maxPlayer }}</p>

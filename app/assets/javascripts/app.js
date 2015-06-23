@@ -29,26 +29,49 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             controller:'AuthCtrl'
         })
         .state('profil', {
+            views: {
+              "@" : {
+                  templateUrl: "partials/profil/profil.html",
+                  controller: "ProfilCtrl"
+              }
+            } ,
             url: "/profil",
-            templateUrl: "partials/profil.html",
-            controller: "ProfilCtrl",
-            onEnter: function (authService) {
+            onEnter: function (authService, $state) {
                 authService.isAuth();
+                console.log('here')
             }
+        })
+        .state('profil.index', {
+            url: "/home",
+            templateUrl: "partials/profil/index.html"
         })
 
         .state('profil.characters',{
             url: "/characters",
             templateUrl: "partials/characters/index.html",
-            controller: "CharactersController",
-            onEnter: function (authService) {
-                authService.isAuth();
-            }
+            controller: "CharactersController"
         })
         .state('profil.character', {
             url: "/character/:id",
             templateUrl: "partials/characters/show.html",
-            controller: "CharacterController"
+            controller: "CharactersController"
+        })
+        .state('profil.newCharacter', {
+            url: "/characters/new",
+            templateUrl: "partials/characters/new.html",
+            controller: "CharactersController"
+        })
+
+        .state('profil.editCharacter', {
+            url: "/characters/:id/edit",
+            templateUrl: "partials/characters/edit.html",
+            controller: "CharactersController"
+        })
+
+        .state('profil.deleteCharacter', {
+            url: "/characters/:id",
+            templateUrl: "partials/characters/edit.html",
+            controller: "CharactersController"
         })
         .state('games', {
             url: "/games",

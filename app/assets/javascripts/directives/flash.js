@@ -10,6 +10,7 @@ zurvives.directive('flash', function(socket, $rootScope) {
         $scope.$on('$destroy', function (event) {
             socket.removeAllListeners();
         });
+
         socket.on('flash:message', function(data){
             $scope.flashMessage = data.message;
             $("#flash-message").fadeIn(300);

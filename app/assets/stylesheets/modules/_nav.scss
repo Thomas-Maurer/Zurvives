@@ -16,6 +16,10 @@
       float:left;
       margin:0;
       padding:0;
+      .active {
+        background:$red1;
+        color:white;
+      }
       a {
         text-decoration: none;
         margin:0;
@@ -28,6 +32,10 @@
         font-family: $title;
         font-size: 13px;
         &:hover {
+          background:$red1;
+          color:white;
+        }
+        .active {
           background:$red1;
           color:white;
         }

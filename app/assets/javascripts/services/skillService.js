@@ -2,7 +2,7 @@
 
 angular
     .module('zurvives')
-    .factory('Service', skillService);
+    .factory('skillService', skillService);
 
 skillService.$inject = ["AngularData"]
 function skillService(AngularData) {
@@ -19,11 +19,7 @@ function skillService(AngularData) {
 
     function all() {
         var that = this;
-        AngularData.all(this.resource).then(function(data){
-            _.each(data.skills, function(skill){
-                that.lists.push(new Skill(equipment, this));
-            })
-        });
+        return AngularData.all(this.resource);
     }
 
     function show(id) {
