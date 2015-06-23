@@ -73,6 +73,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 									var results = name.match(/(\d+|\D+)/g);
 									switch(name) {
 										case "Collision":
+										case "SpawnZombie":
 											eval('cellBitmap. ' + results[0] + ' = true');
 											break;
 										default:
@@ -83,10 +84,9 @@ zurvives.directive('board', function($http, boardData, socket) {
 							}
 						});
 
-						// console.log(cellBitmap);
-
 						cellBitmap.addEventListener("click", $scope.canMoveTo);
 						container.addChild(cellBitmap);
+
 					};
 				};
 
