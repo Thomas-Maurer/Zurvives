@@ -8,6 +8,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.alreadyLoot = false;
     $scope.characterService = characterService;
 
+
     socket.emit('game:get', $scope.slug);
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
@@ -18,6 +19,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
             flashService.emit('La partie est pleine')
         } else {
             $scope.currentGame = data;
+            $scope.currentChar =_.findWhere($scope.currentGame.listChar,$scope.user.email);
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
         }
     });
@@ -31,6 +33,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                     $scope.initPlayer($scope.color, player.email);
                 });
             }
+            console.log($scope.currentChar);
         }
     });
 
@@ -40,7 +43,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:leave', function (user) {
         socket.emit('game:players:get',$scope.slug);
-        flashService.emit("Un joueur Ã  quittÃ© la partie.")
+        flashService.emit("Un joueur à  quitté la partie.");
 
         if (typeof ($scope.deletePlayer) === 'function') {
             console.log("user has leaves : " + user);
@@ -77,7 +80,6 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     $scope.checkIfPlayerTurn = function () {
-        console.log($scope.currentGame.turnof);
         return $scope.currentGame.turnof === $scope.user.email;
     };
 
@@ -90,12 +92,11 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
         var data = {currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions};
         socket.emit('game:player:endturn',data);
-        console.log(indexOfCurrentPlayer);
     };
 
     socket.on('game:player:loot', function (data) {
         var charToUpdate = _.findWhere($scope.currentGame.listChar, data.user);
-        charToUpdate.equipments.push(data.loot);
+        equipmentService.create(data.loot.id, charToUpdate.id);
         console.log('Char ' + charToUpdate.name + ' has looted '+ data.loot.name);
 
     });
@@ -117,15 +118,14 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.lootIfYouCan = function (ZoneWhereYouWantToLoot, playerZone) {
         if (!$scope.alreadyLoot) {
             if (ZoneWhereYouWantToLoot === playerZone){
-                //TODO Call api angular to get a random item
                 $http.get('/api/equipment/random_equip').
                     success(function(data, status, headers, config) {
-                        var currentChar = _.findWhere($scope.currentGame.listChar, $scope.user.email);
-                        currentChar.equipments.push(data.equipments);
                         $scope.alreadyLoot = true;
                         $scope.actions--;
 
-                        equipmentService.create(data.equipments.id, currentChar.id);
+                        equipmentService.create(data.equipments.id, $scope.currentChar.id);
+                        //TODO Reload current char to update in html inventory
+                        console.log('Char ' + $scope.currentChar.name + ' has looted '+ data.loot.name);
 
                         socket.emit('player:loot:addinvotory', {user: $scope.user.email, loot: data.equipments, slug: $scope.slug} );
                     }).
