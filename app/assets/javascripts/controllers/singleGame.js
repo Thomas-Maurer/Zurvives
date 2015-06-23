@@ -7,10 +7,10 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
             $location.path('/games');
-            socket.emit('game:not_found');
+            socket.emit('flash:message:send',{message: "La partie n'existe pas"});
         } else if(data.playerList.length >= data.maxPlayer){
             $location.path('/games');
-            socket.emit('game:full');
+            socket.emit('flash:message:send',{message: "La partie est pleine"});
         } else {
             $scope.currentGame = data;
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
@@ -36,13 +36,11 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('player:leave', function (user) {
-        console.log("user has leaves : " + user);
         socket.emit('game:players:get',$scope.slug);
+        socket.emit('flash:message:send',{message: 'Un joueur a quitté la partie'});
     });
 
     socket.on('player:join', function (user) {
-        //
-        console.log("user has join : " + user);
         if (typeof ($scope.initPlayer) === 'function' && user !== null) {
             if ( _.where($scope.listplayer, user.email) ){
                 $scope.initPlayer($scope.color, user.email);
@@ -53,6 +51,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:owner:leave', function () {
         $location.path('/games');
+        socket.emit('flash:message:send',{message: 'Le propriétaire à quitté la partie'});
     });
 
     socket.on('game:changeturn', function (nextplayer) {

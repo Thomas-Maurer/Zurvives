@@ -29,6 +29,7 @@ exports.initGame = function (io, socket) {
             sendPlayersList(broadcast,currentGame);
             sendPlayersList(socket,currentGame);
             socket.broadcast.emit('player:join', player);
+            socket.broadcast.emit('flash:message',{message: 'Un joueur à rejoint la partie'});
             socket.broadcast.emit('listGame:refresh', listGames);
 
         });
