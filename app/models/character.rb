@@ -12,8 +12,10 @@ class Character < ActiveRecord::Base
   has_many :skills, through: :character_skills
 
   has_many :character_equipments
-  has_many :equipments , through: :character_equipments
+  has_many :equipments ,  -> { uniq }, through: :character_equipments
 
+  has_many :character_weapons
+  has_many :weapons ,  -> { uniq }, through: :character_weapons
 
   def create_level
     self.level = Level.create

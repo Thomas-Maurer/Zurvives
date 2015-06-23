@@ -4,8 +4,8 @@ angular
     .module('zurvives')
     .factory('characterService', characterService);
 
-characterService.$inject = ["AngularData", "$q", "$http"]
-function characterService(AngularData, $q, $http) {
+characterService.$inject = ["AngularData", "$q", "$http", "socket"]
+function characterService(AngularData, $q, $http, socket) {
     var service = {
         all: all,
         show: show,
