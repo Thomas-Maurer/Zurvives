@@ -19,6 +19,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 			var boardGround = boardData.layer2d["Board"];
 
 			var neighboorZones = {};
+			var zones = [];
 
 			var tilesetImage = new Image();
 			tilesetImage.src = '/board/images/tileset.png';
@@ -27,6 +28,8 @@ zurvives.directive('board', function($http, boardData, socket) {
 			var stage = new createjs.Stage(element[0]);
 			var container = new createjs.Container();
 			container.name = "tilesContainer";
+			var chemin = new createjs.Container();
+			chemin.name = "cheminZombie";
 			stage.enableMouseOver();
 			var tileSize = boardData.dataJson.tilewidth;       // The size of a tile (32×32)
 			var rowTileCount = boardData.dataJson.width;   // The number of tiles in a row of our background
@@ -106,6 +109,9 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 			var player;
 
+			var zombie;
+			var zombiePath;
+
             $scope.initPlayer = function initPlayer(color, username) {
 				player = new createjs.Shape();
 				player.graphics.beginFill(color).drawCircle(0,0,10);
@@ -120,6 +126,17 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.update();
 			};
 
+			$scope.initZombie = function initZombie() {
+				zombie = new createjs.Shape();
+				zombie.graphics.beginFill("red").drawCircle(0,0,10);
+				zombie.x = tileSize/2;
+                zombie.y = 19*tileSize + tileSize/2;
+				zombie.Zone = 34;
+				stage.addChild(zombie);
+				stage.update();
+				// findPath(parseInt(zombie.Zone),parseInt(player.Zone));
+			}
+
             $scope.deletePlayer = function (useremail) {
                 debugger;
                 var playerToDelete = _.findWhere($scope.listplayer, useremail);
@@ -132,6 +149,10 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
                 $scope.alreadyMove = true;
+                console.log(object.Zone);
+                chemin.removeAllChildren();
+                stage.update();
+                findPath(parseInt(zombie.Zone),parseInt(object.Zone));
             };
             $scope.moveToBroadcast = function moveTo(object, x, y) {
                 object.x= x;
@@ -147,10 +168,10 @@ zurvives.directive('board', function($http, boardData, socket) {
                         var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 
                         if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                        	player.Zone = e.currentTarget.Zone;
                             $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-                            player.Zone = e.currentTarget.Zone;
 
-                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.Zone}, slug: $scope.$parent.slug};
 
                             socket.emit('game:stage:player:move', data);
                             socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
@@ -168,20 +189,135 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 			};
 
+			var findPath = function(zombieZone,loudestZone) {
+				var closedList = [];
+				var zZone = _.findWhere(zones, { zone: zombieZone.toString() });
+				var lZone = _.findWhere(zones, { zone: loudestZone.toString() });
+				var openList = [zZone];
+				var currentZone = zZone;
 
+				stage.addChild(chemin);
+
+				while(openList.length > 0) {
+					debugger;
+					var zombieZoneNeighboors = currentZone.neighbors;
+
+					// var point = new createjs.Shape();
+					// point.graphics.beginFill("purple").drawCircle(parseInt(currentZone.x*tileSize + tileSize/2),parseInt(currentZone.y*tileSize + tileSize/2),10);
+					// chemin.addChild(point);
+					// stage.update();
+					
+					for (var i = 0; i < zombieZoneNeighboors.length; i++) {
+						var neighbor = zombieZoneNeighboors[i];
+						if(neighbor === lZone) {
+							neighbor.parent = currentZone;
+							zombiePath = neighbor.pathToOrigin();
+							openList = [];
+							// drawSolution();
+							return true;
+
+						}
+						if(!_.include(closedList, neighbor)) {
+							if(!_.include(openList, neighbor)) {
+								openList.push(neighbor);
+								neighbor.parent = currentZone;
+								neighbor.heuristic = neighbor.score() + getDistanceBetween(neighbor,lZone);
+							}
+						}
+					}
+
+					closedList.push(currentZone);
+					openList.remove(_.indexOf(openList, currentZone));
+
+					currentZone = _.min(openList,function(object) {return object.heuristic});
+				}
+			}
+
+			// function drawSolution() {
+			// 	var i = 0;
+			// 	var path = zombiePath;
+			// 	setInterval(function() {
+			// 		if(i < path.length) {
+			// 			// for (var i = 0; i < path.length; i++) {
+			// 				var point = new createjs.Shape();
+			// 				point.graphics.beginFill("purple").drawCircle(parseInt(path[i].x*tileSize + tileSize/2),parseInt(path[i].y*tileSize + tileSize/2),10);
+			// 				chemin.addChild(point);
+			// 				stage.update();
+			// 			// };
+			// 		} else {
+			// 			return
+			// 		}
+			// 		i++;
+			// 	}, 50);
+			// }
+
+			function getDistanceBetween(start, end) {
+				var xDist = Math.abs((parseInt(start.x)*tileSize) - (parseInt(end.x)*tileSize));
+			    var yDist = Math.abs((parseInt(start.y)*tileSize) - (parseInt(end.y)*tileSize));
+
+			    return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+			}
+
+			var Zone = function(zone, y, x) {
+				this.zone = zone;
+				this.neighbors = [];
+				this.x = x;
+				this.y = y;
+				this.parent = null;
+				this.heuristic = 0;
+
+				this.score = function() {
+					var total = 0;
+					var p = this.parent;
+
+					while(p) {
+						++total;
+						p = p.parent;
+					}
+					return total;
+				}
+
+				this.pathToOrigin = function() {
+					var path = [this];
+					var p = this.parent;
+
+					while(p) {
+						path.push(p);
+						p = p.parent;
+					}
+
+					path.reverse();
+
+					return path;
+				}
+			}
 
 			function fillNeighboors() {
 				var element;
 				var col;
 				var row;
 				var tiles = container.children;
+				var first_iteration = true;
 				for (var i = 0; i < tiles.length; i++) {
 					element = tiles[i].name.split(/_|-/);
 					col = element[1];
 					row = element[2];
 					if(tiles[i].Zone) {
-						checkNeighboors(tiles[i], col, row);	
+						checkNeighboors(tiles[i], col, row);
+						var zone = new Zone(tiles[i].Zone, col, row);
+						if(first_iteration) {
+							zones.push(zone);
+							first_iteration = false;
+						}
+						if(!_.findWhere(zones, {zone: tiles[i].Zone})) {
+							zones.push(zone);
+						}
 					}
+				};
+				for (var b = 0; b < zones.length; b++) {
+					for (var c = 0; c < neighboorZones[parseInt(zones[b].zone)].length; c++) {
+						zones[b].neighbors.push(_.findWhere(zones, { zone: neighboorZones[parseInt(zones[b].zone)][c].toString() }));
+					};
 				};
 
 			}
@@ -226,6 +362,57 @@ zurvives.directive('board', function($http, boardData, socket) {
 	            	}
 	            };
 
+			}
+
+			// A BOUGER DE PLACE ICI C'EST NUL !!!!
+
+			// Array Remove - By John Resig (MIT Licensed)
+			Array.prototype.remove = function(from, to) {
+			  var rest = this.slice((to || from) + 1 || this.length);
+			  this.length = from < 0 ? this.length + from : from;
+			  return this.push.apply(this, rest);
+			};
+
+			// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+			if (!Object.keys) {
+			  Object.keys = (function() {
+			    'use strict';
+			    var hasOwnProperty = Object.prototype.hasOwnProperty,
+			        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+			        dontEnums = [
+			          'toString',
+			          'toLocaleString',
+			          'valueOf',
+			          'hasOwnProperty',
+			          'isPrototypeOf',
+			          'propertyIsEnumerable',
+			          'constructor'
+			        ],
+			        dontEnumsLength = dontEnums.length;
+
+			    return function(obj) {
+			      if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+			        throw new TypeError('Object.keys called on non-object');
+			      }
+
+			      var result = [], prop, i;
+
+			      for (prop in obj) {
+			        if (hasOwnProperty.call(obj, prop)) {
+			          result.push(prop);
+			        }
+			      }
+
+			      if (hasDontEnumBug) {
+			        for (i = 0; i < dontEnumsLength; i++) {
+			          if (hasOwnProperty.call(obj, dontEnums[i])) {
+			            result.push(dontEnums[i]);
+			          }
+			        }
+			      }
+			      return result;
+			    };
+			  }());
 			}
 
 		});

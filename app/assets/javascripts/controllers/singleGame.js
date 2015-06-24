@@ -31,6 +31,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         if (typeof ($scope.initPlayer) === 'function') {
             if ($scope.players.length === 1 ) {
                 $scope.initPlayer($scope.color, $scope.user.email);
+                $scope.initZombie();
             }else {
                 _.each($scope.players, function (player) {
                     $scope.initPlayer($scope.color, player.email);
@@ -108,7 +109,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     /* == Movements = */
 
     socket.on('game:player:move', function (data) {
-        console.log("User moove to ...");
+        console.log("User move to ...");
         if (typeof ($scope.moveToBroadcast) === 'function') {
             var playerOnMotion =_.where($scope.listplayer, data.player.name)[0];
             $scope.moveToBroadcast(playerOnMotion, data.player.x, data.player.y);
