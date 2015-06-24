@@ -7,6 +7,15 @@
         </div>
 
         <button ng-click="endTurn()">End Turn</button>
+
+        <div id="currentChar">
+            Character name : <span ng-bind="currentChar.name"></span>
+            <span ng-bind="currentChar.id"></span>
+            <div ng-repeat="stuff in currentChar.equipments">
+                {{stuff.name}}
+            </div>
+
+        </div>
     </div>
     <div id="map">
         <canvas id="board-canvas" board width="{{boardWidth}}" height="{{boardHeight}}"></canvas>
