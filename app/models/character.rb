@@ -17,6 +17,8 @@ class Character < ActiveRecord::Base
   has_many :character_weapons
   has_many :weapons ,  -> { uniq }, through: :character_weapons
 
+  accepts_nested_attributes_for :skills, :allow_destroy => true
+
   def create_level
     self.level = Level.create
   end

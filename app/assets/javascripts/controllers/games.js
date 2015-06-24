@@ -1,5 +1,7 @@
-zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket, characterService) {
-    socket.removeAllListeners();
+zurvives.controller('GamesController', function ($scope, $auth, $location, $http, socket, characterService,flashService) {
+    $scope.$on('$destroy', function (event) {
+        socket.removeAllListeners();
+    });
     $scope.gameName = "";
     $scope.players = [];
     $scope.listGame = [];
@@ -24,22 +26,20 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
 
 
     $scope.createGame = function () {
+        console.log("test");
         if ($scope.gameName.length > 3) {
             var maxPlayer = $('select').val();
             socket.emit('games:create', {name: $scope.gameName,email: $scope.user.email, maxPlayer: maxPlayer, character: $scope.character});
         } else {
-            $scope.error = "Le nom de la partie doit avoir plus de 3 lettres";
+            flashService.emit('Le nom de la partie doit avoir plus de 3 lettres');
         }
     };
 
 
     socket.emit('games:get');
-
-    socket.on('game:exist', gameExist);
     socket.on('listGame:refresh', refreshListGame);
     socket.on('listGame:redirect', redirectToGame);
-    socket.on('game:full', gameFull);
-    socket.on('game:not-found', gameNotFound);
+
 
     function refreshListGame(data) {
         if (data.length != 0) {
@@ -59,15 +59,4 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
         $location.path('/game/' + game.slug);
     }
 
-    function gameExist() {
-        console.log("Game exists already");
-    }
-
-    function gameFull() {
-        console.log("Game is full");
-    }
-
-    function gameNotFound() {
-        console.log("Game not found");
-    }
 });

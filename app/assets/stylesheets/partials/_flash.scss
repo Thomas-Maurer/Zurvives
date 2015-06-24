@@ -1,0 +1,16 @@
+#flash-message {
+  display: none;
+  min-height:10px;
+  overflow:hidden;
+  background:$red1;
+  width:250px;
+  margin:auto;
+  color:white;
+  padding:10px;
+  top:10px;
+  left:0;
+  right:0;
+  text-align:center;
+  position:fixed;
+  z-index:100000;
+}
