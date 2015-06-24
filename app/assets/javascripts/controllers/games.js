@@ -44,7 +44,9 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
     function refreshListGame(data) {
         if (data.length != 0) {
             for (var i in data) {
-                data[i].playerListCount = data[i].playerList.length;
+                if (data[i].playerListCount !== undefined) {
+                    data[i].playerListCount = data[i].playerList.length;
+                }
             }
             $scope.listGame = data;
             $scope.gameError = "";

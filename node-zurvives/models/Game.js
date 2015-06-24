@@ -9,8 +9,9 @@ var Game = Class.extend({
      * @param owner
      * @param maxPlayer
      * @param listChar
+     * @param listZombies
      */
-    init: function (name, owner, maxPlayer, listChar) {
+    init: function (name, owner, maxPlayer, listChar, listZombies) {
         this.name = name;
         this.slug = name.replace(/ /g,"-");
         this.owner = owner;
@@ -18,6 +19,7 @@ var Game = Class.extend({
         this.turnof = owner;
         this.playerList = [];
         this.listChar = listChar;
+        this.listZombies = listZombies;
     },
     addPlayer: function(player) {
         this.playerList.push(player);
@@ -38,6 +40,9 @@ var Game = Class.extend({
     },
     addChar: function(char) {
         this.listChar.push(char);
+    },
+    addZombie: function(zombie) {
+        this.listZombies.push(zombie);
     },
     deleteChar: function(char) {
 

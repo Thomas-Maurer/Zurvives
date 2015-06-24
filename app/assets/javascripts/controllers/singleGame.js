@@ -2,6 +2,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.slug = $stateParams.slug;
     $scope.players = [];
     $scope.listplayer = [];
+    $scope.listZombies = [];
     $scope.actions = 3;
     $scope.alreadyMove = false;
     $scope.alreadyLoot = false;
@@ -22,7 +23,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
             })
         } else {
             $scope.currentGame = data;
-            $scope.currentChar =_.findWhere($scope.currentGame.listChar,$scope.user.email);
+            $scope.currentChar = _.find($scope.currentGame.listChar,function (char) {return char.user.email === $scope.user.email});
             socket.emit('game:join', {slug: $scope.slug, user: $scope.user});
         }
     });
@@ -31,13 +32,11 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         if (typeof ($scope.initPlayer) === 'function') {
             if ($scope.players.length === 1 ) {
                 $scope.initPlayer($scope.color, $scope.user.email);
-                $scope.initZombie();
             }else {
                 _.each($scope.players, function (player) {
                     $scope.initPlayer($scope.color, player.email);
                 });
             }
-            console.log($scope.currentChar);
         }
     });
 
@@ -47,10 +46,10 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:leave', function (user) {
         socket.emit('game:players:get',$scope.slug);
-        flashService.emit("Un joueur ï¿½ quittï¿½ la partie.");
+        flashService.emit("Un joueur à quitté la partie.");
 
         if (typeof ($scope.deletePlayer) === 'function') {
-            console.log("user has leaves : " + user);
+            flashService.emit("user has leaves : " + user);
             $scope.deletePlayer(user);
             socket.emit('game:players:get', $scope.slug);
         }
@@ -58,7 +57,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:join', function (user) {
         if (typeof ($scope.initPlayer) === 'function' && user !== null) {
-            console.log("user has join : " + user);
+            flashService.emit("user has join : " + user);
             if ( _.where($scope.listplayer, user.email) ){
                 $scope.initPlayer($scope.color, user.email);
             }
@@ -68,7 +67,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:owner:leave', function () {
         $state.go("games").then(function(){
-            flashService.emit("Le propriÃ©taire Ã  quittÃ© la partie.")
+            flashService.emit("Le propriétaire Ã  quitté la partie.")
         })
     });
 
@@ -77,6 +76,13 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         $scope.actions = 3;
         $scope.alreadyMove = false;
         $scope.alreadyLoot = false;
+        flashService.broadcast("Turn of "+ nextplayer);
+        flashService.emit("Turn of "+ nextplayer);
+    });
+
+    socket.on('reload:game', function (data){
+        $scope.currentGame = data;
+        console.log($scope.currentGame);
     });
 
     $scope.$on('$stateChangeStart', function() {
@@ -99,17 +105,38 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         socket.emit('game:player:endturn',data);
     };
 
+    socket.on('game:zombieturn', function () {
+        if (typeof ($scope.getSpawnZombies) === 'function' ){
+
+            if ($scope.currentGame.listZombies.length > 0 ) {
+                _.each($scope.currentGame.listZombies, function (zombie) {
+                    var loudestZone = _.max($scope.getZones(), function(zone){
+                        return zone.noise;
+                    });
+                    var pathZ = $scope.findPath(zombie.zone.toString(),loudestZone.zone.toString());
+                    var zombieInMotion =_.where($scope.listZombies,{id: zombie.id})[0];
+                    $scope.moveToZ(zombieInMotion, pathZ[1].x, pathZ[1].y);
+
+                    socket.emit('game:zombie:move',{id: zombie.id, zone: pathZ[1].zone, slug: $scope.slug});
+                });
+            }
+            console.log('zombie turn');
+            _.each($scope.getSpawnZombies(), function (zone) {
+                $scope.initZombie(zone, $scope.listZombies.length);
+            });
+            socket.emit('game:zombies:loaded', {slug: $scope.slug});
+        }
+    });
     socket.on('game:player:loot', function (data) {
         var charToUpdate = _.findWhere($scope.currentGame.listChar, data.user);
         equipmentService.create(data.loot.id, charToUpdate.id);
-        console.log('Char ' + charToUpdate.name + ' has looted '+ data.loot.name);
+        flashService.emit('Char ' + charToUpdate.name + ' has looted '+ data.loot.name);
 
     });
 
     /* == Movements = */
 
     socket.on('game:player:move', function (data) {
-        console.log("User move to ...");
         if (typeof ($scope.moveToBroadcast) === 'function') {
             var playerOnMotion =_.where($scope.listplayer, data.player.name)[0];
             $scope.moveToBroadcast(playerOnMotion, data.player.x, data.player.y);
@@ -130,7 +157,8 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
                         equipmentService.create(data.equipments.id, $scope.currentChar.id);
                         //TODO Reload current char to update in html inventory
-                        console.log('Char ' + $scope.currentChar.name + ' has looted '+ data.loot.name);
+                        flashService.broadcast('Char ' + $scope.user.email + ' has looted '+ data.equipments.name);
+                        flashService.emit('Char ' + $scope.user.email + ' has looted '+ data.equipments.name);
 
                         socket.emit('player:loot:addinvotory', {user: $scope.user.email, loot: data.equipments, slug: $scope.slug} );
                     }).
@@ -139,10 +167,10 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                         // or server returns response with an error status.
                     });
             }else {
-                console.log("You are to far to loot Bitch");
+                flashService.emit("You are to far to loot Bitch");
             }
         }else {
-            console.log('You have already loot dont be so greedy !');
+            flashService.emit('You have already loot dont be so greedy !');
 
         }
     };
