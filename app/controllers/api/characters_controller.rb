@@ -33,7 +33,7 @@ class Api::CharactersController < ApplicationController
   private
 
   def character_params
-    params.require(:characters).permit(:name)
+    params.require(:characters).permit(:name, skill_ids: [])
   end
 
 end

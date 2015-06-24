@@ -1,5 +1,8 @@
 <form name="characterForm">
     <input type="text" name="name" placeholder="Name" ng-model="character.name" required>
+    <select ng-change="setSkill(skillSelected)"  ng-model="skillSelected" ng-options="value.id as value.name for value in skillService.lists" required>
+        <option value=''>- Please Choose a skill -</option>
+    </select>
     <button ng-disabled="characterForm.$invalid" ng-click="createCharacter(characterForm, character)">Create Character</button>
 </form>
 <div id="games" class="span12 tablet12 phone12">
