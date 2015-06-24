@@ -79,6 +79,13 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             templateUrl: "partials/games/index.html",
             onEnter: function (authService) {
                 authService.isAuth();
+            },
+
+            resolve:{
+                promiseObj:  function(socket){
+                    socket.removeAllListeners();
+                }
+
             }
         })
         .state('play', {
@@ -95,5 +102,9 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             return response.data;
         }
     });
-
 }]);
+
+zurvives.run(function($rootScope, $location, $state, socket) {
+    $rootScope.$on('$stateChangeStart', function ( ev, to, toParams, from, fromParams) {
+    });
+});
