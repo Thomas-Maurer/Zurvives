@@ -131,7 +131,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 				zombie.Zone = 34;
 				stage.addChild(zombie);
 				stage.update();
-				findPath(parseInt(zombie.Zone),parseInt(player.Zone));
+				// findPath(parseInt(zombie.Zone),parseInt(player.Zone));
 			}
 
             $scope.moveTo = function moveTo(object, x, y) {
@@ -139,6 +139,10 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
                 $scope.alreadyMove = true;
+                console.log(object.Zone);
+                chemin.removeAllChildren();
+                stage.update();
+                findPath(parseInt(zombie.Zone),parseInt(object.Zone));
             };
             $scope.moveToBroadcast = function moveTo(object, x, y) {
                 object.x= x;
@@ -154,10 +158,10 @@ zurvives.directive('board', function($http, boardData, socket) {
                         var isNeighboor = $.inArray(parseInt(e.currentTarget.Zone), eval('neighboorZones[' + player.Zone + ']'));
 
                         if(e.currentTarget.Zone && e.currentTarget.Zone !== player.Zone && isNeighboor !== -1 ) {
+                        	player.Zone = e.currentTarget.Zone;
                             $scope.moveTo(player, (e.currentTarget.x/tileSize), (e.currentTarget.y/tileSize));
-                            player.Zone = e.currentTarget.Zone;
 
-                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.zone}, slug: $scope.$parent.slug};
+                            var data = {player: {name: player.name, x: player.x, y: player.y, zone: player.Zone}, slug: $scope.$parent.slug};
 
                             socket.emit('game:stage:player:move', data);
                             socket.emit('game:changeTurn',{currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions});
@@ -185,7 +189,13 @@ zurvives.directive('board', function($http, boardData, socket) {
 				stage.addChild(chemin);
 
 				while(openList.length > 0) {
+					debugger;
 					var zombieZoneNeighboors = currentZone.neighbors;
+
+					// var point = new createjs.Shape();
+					// point.graphics.beginFill("purple").drawCircle(parseInt(currentZone.x*tileSize + tileSize/2),parseInt(currentZone.y*tileSize + tileSize/2),10);
+					// chemin.addChild(point);
+					// stage.update();
 					
 					for (var i = 0; i < zombieZoneNeighboors.length; i++) {
 						var neighbor = zombieZoneNeighboors[i];
@@ -193,7 +203,7 @@ zurvives.directive('board', function($http, boardData, socket) {
 							neighbor.parent = currentZone;
 							zombiePath = neighbor.pathToOrigin();
 							openList = [];
-							drawSolution();
+							// drawSolution();
 							return true;
 
 						}
@@ -209,36 +219,27 @@ zurvives.directive('board', function($http, boardData, socket) {
 					closedList.push(currentZone);
 					openList.remove(_.indexOf(openList, currentZone));
 
-					currentZone = openList[openList.length-1];
+					currentZone = _.min(openList,function(object) {return object.heuristic});
 				}
 			}
 
-			function drawSolution() {
-				var i = 0;
-				var path = zombiePath;
-				setInterval(function() {
-					if(i < path.length) {
-						// for (var i = 0; i < path.length; i++) {
-							var point = new createjs.Shape();
-							point.graphics.beginFill("purple").drawCircle(parseInt(path[i].x*tileSize + tileSize/2),parseInt(path[i].y*tileSize + tileSize/2),10);
-							chemin.addChild(point);
-							stage.update();
-						// };
-					} else {
-						return
-					}
-					i++;
-				}, 200);
-			}
-
-			function sleep(milliseconds) {
-			  var start = new Date().getTime();
-			  for (var i = 0; i < 1e7; i++) {
-			    if ((new Date().getTime() - start) > milliseconds){
-			      break;
-			    }
-			  }
-			}
+			// function drawSolution() {
+			// 	var i = 0;
+			// 	var path = zombiePath;
+			// 	setInterval(function() {
+			// 		if(i < path.length) {
+			// 			// for (var i = 0; i < path.length; i++) {
+			// 				var point = new createjs.Shape();
+			// 				point.graphics.beginFill("purple").drawCircle(parseInt(path[i].x*tileSize + tileSize/2),parseInt(path[i].y*tileSize + tileSize/2),10);
+			// 				chemin.addChild(point);
+			// 				stage.update();
+			// 			// };
+			// 		} else {
+			// 			return
+			// 		}
+			// 		i++;
+			// 	}, 50);
+			// }
 
 			function getDistanceBetween(start, end) {
 				var xDist = Math.abs((parseInt(start.x)*tileSize) - (parseInt(end.x)*tileSize));
