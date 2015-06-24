@@ -7,12 +7,15 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.alreadyLoot = false;
     $scope.characterService = characterService;
 
+    $scope.$on('$destroy', function (event) {
+        socket.removeAllListeners();
+    });
+
     socket.emit('game:get', $scope.slug);
     socket.on('game:get:return', function (data) {
         if (data == undefined) {
-            $state.go("games").then(function(){
-                flashService.emit("La partie n'existe pas");
-            })
+            flashService.emit("La partie n'existe pas");
+
         } else if(data.playerList.length >= data.maxPlayer){
             $state.go("games").then(function(){
                 flashService.emit('La partie est pleine')

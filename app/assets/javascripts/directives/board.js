@@ -8,6 +8,9 @@ zurvives.directive('board', function($http, boardData, socket) {
     return directive;
 	
 	function link($scope, element, attrs) {
+        $scope.$on('$destroy', function (event) {
+            socket.removeAllListeners();
+        });
 		boardData.getJson().then(function(data) {
 			boardData.setJson(data);
 			boardData.getLayers();
