@@ -16,6 +16,7 @@ exports.initGame = function (io, socket) {
     socket.on('game:add:zombie', addZombieToGame);
     socket.on('game:zombies:loaded', reloadGame);
     socket.on('game:zombie:move', zombieMove);
+   // socket.on('game:zombieturn:end', resetTurn);
     socket.on('player:loot:addinvotory', notifyAllLoot);
 
     function joinGame(data) {
@@ -110,7 +111,6 @@ exports.initGame = function (io, socket) {
                 socket.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
 
             } else {
-                //todo add zombie time
                 broadcast.emit('game:zombieturn');
                 socket.emit('game:zombieturn');
 

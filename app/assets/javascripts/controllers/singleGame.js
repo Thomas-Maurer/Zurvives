@@ -8,6 +8,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.alreadyLoot = false;
     $scope.characterService = characterService;
 
+
     $scope.$on('$destroy', function (event) {
         socket.removeAllListeners();
     });
@@ -72,17 +73,18 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('game:changeturn', function (nextplayer) {
-        $scope.currentGame.turnof = nextplayer;
-        $scope.actions = 3;
-        $scope.alreadyMove = false;
-        $scope.alreadyLoot = false;
-        flashService.broadcast("Turn of "+ nextplayer);
-        flashService.emit("Turn of "+ nextplayer);
+        if () {
+            $scope.currentGame.turnof = nextplayer;
+            $scope.actions = 3;
+            $scope.alreadyMove = false;
+            $scope.alreadyLoot = false;
+            //flashService.broadcast("Turn of "+ nextplayer);
+            flashService.emit("Turn of "+ nextplayer);
+        }
     });
 
     socket.on('reload:game', function (data){
         $scope.currentGame = data;
-        console.log($scope.currentGame);
     });
 
     $scope.$on('$stateChangeStart', function() {
@@ -102,7 +104,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         $scope.actions = 0;
         var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
         var data = {currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions};
-        socket.emit('game:player:endturn',data);
+        socket.emit('game:player:endturn', data);
     };
 
     socket.on('game:zombieturn', function () {
@@ -119,7 +121,6 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                     });
                     var zombieInMotion =_.where($scope.listZombies,{id: zombie.id})[0];
                     $scope.moveToZ(zombieInMotion, pathZ[1].x, pathZ[1].y, pathZ[1].zone);
-
                     socket.emit('game:zombie:move',{id: zombie.id, zone: pathZ[1].zone, slug: $scope.slug});
                 });
             }

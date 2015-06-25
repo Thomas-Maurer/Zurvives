@@ -166,7 +166,6 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
                 $scope.alreadyMove = true;
-                stage.update();
             };
 
             $scope.moveToZ = function moveToZ(object, x, y, zone) {
