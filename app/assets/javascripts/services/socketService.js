@@ -1,5 +1,5 @@
-zurvives.factory('socket', function ($rootScope) {
-    var socket = io.connect("http://"+window.location.hostname+":8000");
+zurvives.factory('socket', function ($rootScope, socketFactory) {
+    /*var socket = io.connect("http://"+window.location.hostname+":8000");
     return {
         on: function (eventName, callback) {
             socket.on(eventName, function () {  
@@ -28,5 +28,13 @@ zurvives.factory('socket', function ($rootScope) {
                 });
             });
         }
-    };
+    };*/
+
+  var myIoSocket = io.connect("http://"+window.location.hostname+":8000");
+
+  mySocket = socketFactory({
+    ioSocket: myIoSocket
+  });
+
+  return mySocket;
 });

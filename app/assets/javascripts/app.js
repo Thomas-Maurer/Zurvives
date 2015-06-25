@@ -1,4 +1,4 @@
-var zurvives = angular.module('zurvives', ['ui.router', 'ng-token-auth']);
+var zurvives = angular.module('zurvives', ['ui.router', 'ng-token-auth', 'btford.socket-io']);
 
 zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
     $locationProvider.html5Mode({

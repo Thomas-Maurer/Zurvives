@@ -18,6 +18,7 @@
 //= require ng-token-auth/dist/ng-token-auth
 //= require underscore/underscore-min
 //= require underscore.inflection/lib/underscore.inflection
+//= require angular-socket-io/socket
 //= require_tree .
 
 

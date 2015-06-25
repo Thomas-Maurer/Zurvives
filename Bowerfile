@@ -10,4 +10,5 @@ group :vendor, :assets_path => "assets"  do
     asset 'underscore', '1.8.3'
     asset 'underscore.inflection'
     asset 'angular-resource'
+    asset 'angular-socket-io'
 end
