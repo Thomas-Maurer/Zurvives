@@ -109,13 +109,16 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         if (typeof ($scope.getSpawnZombies) === 'function' ){
 
             if ($scope.currentGame.listZombies.length > 0 ) {
+                var loudestZone = _.max($scope.getZones(), function(zone){
+                    return zone.noise;
+                });
                 _.each($scope.currentGame.listZombies, function (zombie) {
-                    var loudestZone = _.max($scope.getZones(), function(zone){
-                        return zone.noise;
-                    });
                     var pathZ = $scope.findPath(zombie.zone.toString(),loudestZone.zone.toString());
+                    _.each($scope.getZones(), function(zone) {
+                        zone.parent = null;
+                    });
                     var zombieInMotion =_.where($scope.listZombies,{id: zombie.id})[0];
-                    $scope.moveToZ(zombieInMotion, pathZ[1].x, pathZ[1].y);
+                    $scope.moveToZ(zombieInMotion, pathZ[1].x, pathZ[1].y, pathZ[1].zone);
 
                     socket.emit('game:zombie:move',{id: zombie.id, zone: pathZ[1].zone, slug: $scope.slug});
                 });

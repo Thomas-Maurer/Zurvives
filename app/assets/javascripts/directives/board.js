@@ -117,7 +117,6 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 			var player;
 			var zombie;
-			var zombiePath;
 
             $scope.initPlayer = function initPlayer(color, username) {
 				player = new createjs.Shape();
@@ -153,7 +152,6 @@ zurvives.directive('board', function($http, boardData, socket) {
 				zombiesContainer.addChild(zombie);
                 socket.emit('game:add:zombie', {zombie: {x: zombie.x, y: zombie.y, zone: zombie.Zone, id: zombie.id}, slug: $scope.$parent.slug});
 				stage.update();
-				// findPath(parseInt(zombie.Zone),parseInt(player.Zone));
 			};
 
             $scope.deletePlayer = function (useremail) {
@@ -168,16 +166,13 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
                 $scope.alreadyMove = true;
-                chemin.removeAllChildren();
                 stage.update();
-                //findPath(parseInt(zombie.Zone),parseInt(object.Zone));
             };
 
-            $scope.moveToZ = function moveToZ(object, x, y) {
+            $scope.moveToZ = function moveToZ(object, x, y, zone) {
                 object.x= x*tileSize + tileSize/2;
                 object.y =y*tileSize + tileSize/2;
                 stage.update();
-                //findPath(parseInt(zombie.Zone),parseInt(object.Zone));
             };
             $scope.moveToBroadcast = function moveToBroadcast(object, x, y) {
                 object.x= x;
@@ -228,24 +223,17 @@ zurvives.directive('board', function($http, boardData, socket) {
 				var lZone = _.findWhere(zones, { zone: loudestZone.toString() });
 				var openList = [zZone];
 				var currentZone = zZone;
-
-				//stage.addChild(chemin);
+				var zonesToReset;
 
 				while(openList.length > 0) {
 					var zombieZoneNeighboors = currentZone.neighbors;
-
-					// var point = new createjs.Shape();
-					// point.graphics.beginFill("purple").drawCircle(parseInt(currentZone.x*tileSize + tileSize/2),parseInt(currentZone.y*tileSize + tileSize/2),10);
-					// chemin.addChild(point);
-					// stage.update();
 					
 					for (var i = 0; i < zombieZoneNeighboors.length; i++) {
 						var neighbor = zombieZoneNeighboors[i];
 						if(neighbor === lZone) {
 							neighbor.parent = currentZone;
-							zombiePath = neighbor.pathToOrigin();
 							openList = [];
-							// drawSolution();
+							closedList = [];
                             return neighbor.pathToOrigin();
 
 						}
@@ -267,24 +255,6 @@ zurvives.directive('board', function($http, boardData, socket) {
 				}
 			}
 
-			// function drawSolution() {
-			// 	var i = 0;
-			// 	var path = zombiePath;
-			// 	setInterval(function() {
-			// 		if(i < path.length) {
-			// 			// for (var i = 0; i < path.length; i++) {
-			// 				var point = new createjs.Shape();
-			// 				point.graphics.beginFill("purple").drawCircle(parseInt(path[i].x*tileSize + tileSize/2),parseInt(path[i].y*tileSize + tileSize/2),10);
-			// 				chemin.addChild(point);
-			// 				stage.update();
-			// 			// };
-			// 		} else {
-			// 			return
-			// 		}
-			// 		i++;
-			// 	}, 50);
-			// }
-
 			function getDistanceBetween(start, end) {
 				var xDist = Math.abs((parseInt(start.x)*tileSize) - (parseInt(end.x)*tileSize));
 			    var yDist = Math.abs((parseInt(start.y)*tileSize) - (parseInt(end.y)*tileSize));
@@ -302,7 +272,6 @@ zurvives.directive('board', function($http, boardData, socket) {
                 this.noise = 0;
 
 				this.score = function() {
-                    debugger;
 					var total = 0;
 					var p = this.parent;
 
