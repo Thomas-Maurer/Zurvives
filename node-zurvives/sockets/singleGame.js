@@ -107,17 +107,16 @@ exports.initGame = function (io, socket) {
         if (typeof (currentGame.getPlayerList) === 'function') {
             if (data.currentplayer + 1 < currentGame.getPlayerList().length ) {
                 currentGame.turnOfPlayer(currentGame.getPlayerList()[data.currentplayer + 1].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
+                socket.broadcast.to(data.slug).emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
                 socket.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
 
             } else {
-                broadcast.emit('game:zombieturn');
-                socket.emit('game:zombieturn');
-
                 currentGame.turnOfPlayer(currentGame.getPlayerList()[0].email);
-
+                socket.broadcast.to(data.slug).emit('game:changeturn', currentGame.getPlayerList()[0].email);
                 socket.emit('game:changeturn', currentGame.getPlayerList()[0].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[0].email);
+
+                socket.broadcast.to(data.slug).emit('game:zombieturn');
+                socket.emit('game:zombieturn');
             }
         }
     }

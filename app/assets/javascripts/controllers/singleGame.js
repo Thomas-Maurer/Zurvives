@@ -73,7 +73,8 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     });
 
     socket.on('game:changeturn', function (nextplayer) {
-        if () {
+        console.log(nextplayer);
+        if ($scope.actions === 0 || $scope.user.email === nextplayer) {
             $scope.currentGame.turnof = nextplayer;
             $scope.actions = 3;
             $scope.alreadyMove = false;
