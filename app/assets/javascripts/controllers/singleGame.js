@@ -114,9 +114,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:zombieturn', function () {
         if (typeof ($scope.getSpawnZombies) === 'function' ){
-            flashService.broadcast('Zombie turn');
             flashService.emit('Zombie turn');
-
             if ($scope.currentGame.listZombies.length > 0 ) {
                 var loudestZone = _.max($scope.getZones(), function(zone){
                     return zone.noise;
