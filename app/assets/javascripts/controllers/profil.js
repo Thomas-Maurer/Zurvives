@@ -26,5 +26,4 @@ zurvives.controller('ProfilCtrl', function($scope, $auth, $location,$sce, charac
         userHtml += "<span>" + prop + ": " + $scope.user[prop] + "</span>";
     }
     $scope.userHTML = $sce.trustAsHtml(userHtml);
-    console.log($scope.user);
 });
