@@ -28,15 +28,17 @@ zurvives.directive('board', function($http, boardData, socket) {
 			var stage = new createjs.Stage(element[0]);
 			var container = new createjs.Container();
 			container.name = "tilesContainer";
-			var chemin = new createjs.Container();
-			chemin.name = "cheminZombie";
             var zombiesContainer = new createjs.Container();
             zombiesContainer.name = "zombiesContainer";
+            var zonesContainer = new createjs.Container();
+            zonesContainer.name = "zonesContainer";
 			stage.enableMouseOver();
 			var tileSize = boardData.dataJson.tilewidth;       // The size of a tile (32×32)
 			var rowTileCount = boardData.dataJson.width;   // The number of tiles in a row of our background
 			var colTileCount = boardData.dataJson.height;   // The number of tiles in a column of our background
 			var imageNumTiles = boardData.dataJson.width;  // The number of tiles per row in the tileset image
+
+			var previousZoneForHovering;
 
             $scope.boardWidth = tileSize * rowTileCount;
             $scope.boardHeight = tileSize * colTileCount;
@@ -98,6 +100,33 @@ zurvives.directive('board', function($http, boardData, socket) {
 						});
 
 						cellBitmap.addEventListener("click", $scope.canMoveTo);
+						cellBitmap.addEventListener("mouseover", function(e) {
+							if(e.currentTarget.Zone && (previousZoneForHovering === undefined || !e.relatedTarget || !e.relatedTarget.Zone || e.currentTarget.Zone != previousZoneForHovering)) {
+								var tilesInZone = _.where(container.children, {Zone : e.currentTarget.Zone});
+								_.each( tilesInZone, function(tile) {
+									tile.cursor = "pointer";
+								});
+								previousZoneForHovering = e.currentTarget.Zone;
+								var tileZone = parseInt(e.currentTarget.Zone);
+								var zoneToHover = _.findWhere(zonesContainer.children, {zone: tileZone});
+								zoneToHover.graphics.beginFill("rgba(0,0,0,0.5)").drawRect(zoneToHover.xCoord, zoneToHover.yCoord, zoneToHover.width, zoneToHover.height);
+								zoneToHover.alpha = 1;
+								stage.update();
+							}
+						});
+						cellBitmap.addEventListener("mouseout", function(e) {
+							if(e.currentTarget.Zone && (!e.relatedTarget || previousZoneForHovering != e.relatedTarget.Zone)) {
+								var tilesInZone = _.where(container.children, {Zone : e.currentTarget.Zone});
+								_.each( tilesInZone, function(tile) {
+									tile.cursor = "arrow";
+								});
+								var tileZone = parseInt(e.currentTarget.Zone);
+								var zoneToHover = _.findWhere(zonesContainer.children, {zone: tileZone});
+								zoneToHover.graphics.clear();
+								zoneToHover.alpha = 0;
+								stage.update();
+							}
+						});
 						container.addChild(cellBitmap);
 
 					};
@@ -105,11 +134,34 @@ zurvives.directive('board', function($http, boardData, socket) {
 
 				stage.addChild(container);
                 stage.addChild(zombiesContainer);
+                stage.addChild(zonesContainer);
 				stage.update();
                 $scope.stage = stage;
                 $scope.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-				//$scope.initPlayer($scope.color);
 				fillNeighboors();
+				for (var i = 1; i <= zones.length+1; i++) {
+					var currentZoneTiles = [];
+					_.each(container.children, function(tile) {
+						if(tile.Zone) {
+							if(parseInt(tile.Zone) === i) {
+								currentZoneTiles.push(tile);
+							}
+						}
+					});
+					var minX = _.min(currentZoneTiles, function(zone) {return zone.x}).x;
+					var minY = _.min(currentZoneTiles, function(zone) {return zone.y}).y;
+					var maxX = (_.max(currentZoneTiles, function(zone) {return zone.x}).x) + tileSize;
+					var maxY = (_.max(currentZoneTiles, function(zone) {return zone.y}).y) + tileSize;
+					var drawnZone = new createjs.Shape();
+					drawnZone.graphics.drawRect(minX, minY, (maxX-minX), (maxY-minY));
+					drawnZone.zone = i;
+					drawnZone.xCoord = minX;
+					drawnZone.yCoord = minY;
+					drawnZone.width = maxX-minX;
+					drawnZone.height = maxY-minY;
+					zonesContainer.addChild(drawnZone);
+					stage.update();
+				};
 
                 //Emit event when map fully loaded
                 socket.emit('map:loaded');
