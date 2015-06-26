@@ -7,6 +7,8 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     $scope.alreadyMove = false;
     $scope.alreadyLoot = false;
     $scope.characterService = characterService;
+    $scope.flashService = flashService;
+
 
     $scope.$on('$destroy', function (event) {
         socket.removeAllListeners();
@@ -46,7 +48,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:leave', function (user) {
         socket.emit('game:players:get',$scope.slug);
-        flashService.emit("Un joueur à quitté la partie.");
+        flashService.emit("Un joueur Ã  quittÃ© la partie.");
 
         if (typeof ($scope.deletePlayer) === 'function') {
             flashService.emit("user has leaves : " + user);
@@ -67,22 +69,23 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:owner:leave', function () {
         $state.go("games").then(function(){
-            flashService.emit("Le propriétaire Ã  quitté la partie.")
+            flashService.emit("Le propriÃ©taire Ã  quittÃ© la partie.")
         })
     });
 
     socket.on('game:changeturn', function (nextplayer) {
-        $scope.currentGame.turnof = nextplayer;
-        $scope.actions = 3;
-        $scope.alreadyMove = false;
-        $scope.alreadyLoot = false;
-        flashService.broadcast("Turn of "+ nextplayer);
-        flashService.emit("Turn of "+ nextplayer);
+        if ($scope.actions === 0 || $scope.user.email === nextplayer) {
+            $scope.currentGame.turnof = nextplayer;
+            $scope.actions = 3;
+            $scope.alreadyMove = false;
+            $scope.alreadyLoot = false;
+            //flashService.broadcast("Turn of "+ nextplayer);
+            flashService.emit("Turn of "+ nextplayer);
+        }
     });
 
     socket.on('reload:game', function (data){
         $scope.currentGame = data;
-        console.log($scope.currentGame);
     });
 
     $scope.$on('$stateChangeStart', function() {
@@ -99,14 +102,20 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
     };
 
     $scope.endTurn = function () {
-        $scope.actions = 0;
-        var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
-        var data = {currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions};
-        socket.emit('game:player:endturn',data);
+        if ($scope.currentGame.turnof === $scope.user.email) {
+            $scope.actions = 0;
+            var indexOfCurrentPlayer =_.findIndex($scope.players, _.findWhere($scope.players, {email: $scope.user.email}));
+            var data = {currentplayer: indexOfCurrentPlayer, slug: $scope.slug, actionsLeft: $scope.actions};
+            socket.emit('game:player:endturn', data);
+        } else {
+            flashService.emit("You can't end your turn when it's not your turn GENIUS");
+        }
     };
 
     socket.on('game:zombieturn', function () {
         if (typeof ($scope.getSpawnZombies) === 'function' ){
+            flashService.broadcast('Zombie turn');
+            flashService.emit('Zombie turn');
 
             if ($scope.currentGame.listZombies.length > 0 ) {
                 var loudestZone = _.max($scope.getZones(), function(zone){
@@ -119,11 +128,9 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                     });
                     var zombieInMotion =_.where($scope.listZombies,{id: zombie.id})[0];
                     $scope.moveToZ(zombieInMotion, pathZ[1].x, pathZ[1].y, pathZ[1].zone);
-
-                    socket.emit('game:zombie:move',{id: zombie.id, zone: pathZ[1].zone, slug: $scope.slug});
+                    socket.emit('game:zombie:move',{id: zombie.id, zone: pathZ[1].zone, x: pathZ[1].x, y: pathZ[1].y , slug: $scope.slug});
                 });
             }
-            console.log('zombie turn');
             _.each($scope.getSpawnZombies(), function (zone) {
                 $scope.initZombie(zone, $scope.listZombies.length);
             });
@@ -136,6 +143,11 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
         flashService.emit('Char ' + charToUpdate.name + ' has looted '+ data.loot.name);
 
     });
+    socket.on('game:init:zombie:broadcast', function (data) {
+        if (typeof ($scope.initZombie) === 'function') {
+            $scope.initZombie(data.zone, data.zombie.id, true);
+        }
+    });
 
     /* == Movements = */
 
@@ -144,8 +156,12 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
             var playerOnMotion =_.where($scope.listplayer, data.player.name)[0];
             $scope.moveToBroadcast(playerOnMotion, data.player.x, data.player.y);
         }
-
-
+    });
+    socket.on('game:zombie:move:stage', function (data) {
+        if (typeof ($scope.moveToZ) === 'function') {
+            var zombieOnMotion =_.where($scope.listZombies,{id: data.id})[0];
+            $scope.moveToZ(zombieOnMotion, data.x, data.y);
+        }
     });
 
     /* == Loot = */
@@ -170,7 +186,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                         // or server returns response with an error status.
                     });
             }else {
-                flashService.emit("You are to far to loot Bitch");
+                flashService.emit("You are to far to loot");
             }
         }else {
             flashService.emit('You have already loot dont be so greedy !');

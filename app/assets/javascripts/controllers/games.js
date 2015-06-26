@@ -26,7 +26,6 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
 
 
     $scope.createGame = function () {
-        console.log("test");
         if ($scope.gameName.length > 3) {
             var maxPlayer = $('select').val();
             socket.emit('games:create', {name: $scope.gameName,email: $scope.user.email, maxPlayer: maxPlayer, character: $scope.character});
@@ -44,7 +43,7 @@ zurvives.controller('GamesController', function ($scope, $auth, $location, $http
     function refreshListGame(data) {
         if (data.length != 0) {
             for (var i in data) {
-                if (data[i].playerListCount !== undefined) {
+                if (data[i].playerList !== undefined) {
                     data[i].playerListCount = data[i].playerList.length;
                 }
             }

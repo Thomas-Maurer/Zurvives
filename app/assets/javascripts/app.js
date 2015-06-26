@@ -38,7 +38,6 @@ zurvives.config(['$stateProvider', '$urlRouterProvider', '$authProvider', '$loca
             url: "/profil",
             onEnter: function (authService, $state) {
                 authService.isAuth();
-                console.log('here')
             }
         })
         .state('profil.index', {

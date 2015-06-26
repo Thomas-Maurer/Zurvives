@@ -192,7 +192,7 @@ zurvives.directive('board', function($http, boardData, socket) {
                 return zoneZombies;
             };
 
-			$scope.initZombie = function initZombie(zone, id) {
+			$scope.initZombie = function initZombie(zone, id, broadcast) {
 				zombie = new createjs.Shape();
 				zombie.graphics.beginFill("red").drawCircle(0,0,10);
 				zombie.x = zone.x + tileSize/2;
@@ -202,12 +202,14 @@ zurvives.directive('board', function($http, boardData, socket) {
                 //Add zombie to scope
                 $scope.listZombies.push(zombie);
 				zombiesContainer.addChild(zombie);
-                socket.emit('game:add:zombie', {zombie: {x: zombie.x, y: zombie.y, zone: zombie.Zone, id: zombie.id}, slug: $scope.$parent.slug});
-				stage.update();
+                if (!broadcast){
+                    socket.emit('game:add:zombie', {zone: {Zone: zombie.Zone, x: zone.x, y: zone.y}, zombie: {x: zombie.x, y: zombie.y, zone: zombie.Zone, id: zombie.id}, slug: $scope.$parent.slug});
+
+                }
+                stage.update();
 			};
 
             $scope.deletePlayer = function (useremail) {
-                debugger;
                 var playerToDelete = _.findWhere($scope.listplayer, useremail);
                 stage.removeChild(playerToDelete);
                 stage.update();
@@ -218,7 +220,6 @@ zurvives.directive('board', function($http, boardData, socket) {
 				object.y =y*tileSize + tileSize/2;
 				stage.update();
                 $scope.alreadyMove = true;
-                stage.update();
             };
 
             $scope.moveToZ = function moveToZ(object, x, y, zone) {
@@ -256,15 +257,18 @@ zurvives.directive('board', function($http, boardData, socket) {
 
                             socket.emit('game:stage:player:move', data);
                         } else {
-                            console.log("Vous ne passerez pas!!");
+                            //console.log("Vous ne passerez pas!!");
+                            $scope.flashService.emit('You shall not pass');
 
                         }
                     }else {
-                        console.log("Loot Time");
+                        $scope.flashService.emit('You are trying to loot');
+                        //console.log("Loot Time");
                         $scope.lootIfYouCan(e.currentTarget.Zone, player.Zone);
                     }
                 }else {
-                    console.log('cannot move not your turn');
+                    $scope.flashService.emit('cannot move not your turn');
+                   // console.log('cannot move not your turn');
                 }
 
 			};

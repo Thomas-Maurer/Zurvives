@@ -16,6 +16,7 @@ exports.initGame = function (io, socket) {
     socket.on('game:add:zombie', addZombieToGame);
     socket.on('game:zombies:loaded', reloadGame);
     socket.on('game:zombie:move', zombieMove);
+   // socket.on('game:zombieturn:end', resetTurn);
     socket.on('player:loot:addinvotory', notifyAllLoot);
 
     function joinGame(data) {
@@ -35,7 +36,7 @@ exports.initGame = function (io, socket) {
             sendPlayersList(broadcast,currentGame);
             sendPlayersList(socket,currentGame);
             socket.broadcast.emit('player:join', player);
-            socket.broadcast.emit('flash:message',{message: 'Un joueur à rejoint la partie'});
+            broadcast.emit('flash:message',{message: 'Un joueur à rejoint la partie'});
             socket.broadcast.emit('listGame:refresh', listGames);
 
         });
@@ -43,11 +44,13 @@ exports.initGame = function (io, socket) {
     function zombieMove (data) {
         var currentGame = getCurrentGame(data.slug);
         currentGame.listZombies[_.indexOf(currentGame.listZombies, _.where(currentGame.listZombies, {id: data.id})[0])].zone = data.zone;
+        var broadcast = socket.broadcast.to(data.slug);
+        //Send to all something for update stage
+        socket.broadcast.to(data.slug).emit('game:zombie:move:stage', data);
     }
     function reloadGame (data) {
         var currentGame = getCurrentGame(data.slug);
-        var broadcast = socket.broadcast.to(data.slug);
-        broadcast.emit('reload:game',currentGame);
+        socket.broadcast.in(data.slug).emit('reload:game',currentGame);
         socket.emit('reload:game',currentGame);
     }
 
@@ -88,6 +91,7 @@ exports.initGame = function (io, socket) {
 
         var currentGame = getCurrentGame(data.slug);
         currentGame.addZombie(data.zombie);
+        socket.broadcast.to(data.slug).emit('game:init:zombie:broadcast',data);
     }
 
     function notifyAllLoot (data) {
@@ -106,18 +110,16 @@ exports.initGame = function (io, socket) {
         if (typeof (currentGame.getPlayerList) === 'function') {
             if (data.currentplayer + 1 < currentGame.getPlayerList().length ) {
                 currentGame.turnOfPlayer(currentGame.getPlayerList()[data.currentplayer + 1].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
+                socket.broadcast.to(data.slug).emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
                 socket.emit('game:changeturn', currentGame.getPlayerList()[data.currentplayer + 1].email);
 
             } else {
-                //todo add zombie time
-                broadcast.emit('game:zombieturn');
-                socket.emit('game:zombieturn');
-
                 currentGame.turnOfPlayer(currentGame.getPlayerList()[0].email);
-
+                socket.broadcast.to(data.slug).emit('game:changeturn', currentGame.getPlayerList()[0].email);
                 socket.emit('game:changeturn', currentGame.getPlayerList()[0].email);
-                broadcast.emit('game:changeturn', currentGame.getPlayerList()[0].email);
+
+                //socket.broadcast.to(data.slug).emit('game:zombieturn');
+                socket.emit('game:zombieturn');
             }
         }
     }

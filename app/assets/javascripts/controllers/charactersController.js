@@ -5,7 +5,6 @@ zurvives.controller('CharactersController', function ($scope, characterService) 
     }
 
     $scope.createCharacter = function(form, character) {
-        console.log(character)
         characterService.create(character).then(function(data){
             characterService.lists.push(data.character);
             $scope.character = {
