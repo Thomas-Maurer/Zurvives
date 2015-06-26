@@ -47,7 +47,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('player:leave', function (user) {
         socket.emit('game:players:get',$scope.slug);
-        flashService.emit("Un joueur à quitté la partie.");
+        flashService.emit("Un joueur Ã  quittÃ© la partie.");
 
         if (typeof ($scope.deletePlayer) === 'function') {
             flashService.emit("user has leaves : " + user);
@@ -68,7 +68,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
 
     socket.on('game:owner:leave', function () {
         $state.go("games").then(function(){
-            flashService.emit("Le propriétaire Ã  quitté la partie.")
+            flashService.emit("Le propriÃ©taire Ã  quittÃ© la partie.")
         })
     });
 
@@ -172,7 +172,7 @@ zurvives.controller('singleGameController', function ($scope, $location, $state,
                         // or server returns response with an error status.
                     });
             }else {
-                flashService.emit("You are to far to loot Bitch");
+                flashService.emit("You are to far to loot");
             }
         }else {
             flashService.emit('You have already loot dont be so greedy !');
